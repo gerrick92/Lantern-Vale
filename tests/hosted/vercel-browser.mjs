@@ -12,15 +12,33 @@ const { default: AxeBuilder } = await import("@axe-core/playwright");
 const review = JSON.parse(
   readFileSync("test-results/hosting/review-deployment.json", "utf8"),
 );
-const origin = review.url;
+const origin = review.applicationOrigin || review.url;
+const publicCheck = process.argv.includes("--public");
+assert.ok(
+  origin === review.url || origin === "https://lantern-vale.vercel.app",
+);
 const project = await vercel("/v9/projects/prj_e6pw3goMLbaj0PzAfYiTky6DgUib");
-const bypass = Object.keys(project.protectionBypass || {})[0];
-assert.ok(bypass);
-assert.equal((await fetch(origin, { redirect: "manual" })).status, 302);
-const env = parseEnv(readFileSync("apps/web/.env.staging.local", "utf8"));
+const bypass = publicCheck
+  ? undefined
+  : Object.keys(project.protectionBypass || {})[0];
+if (!publicCheck) assert.ok(bypass);
+if (publicCheck) assert.equal(origin, "https://lantern-vale.vercel.app");
+assert.equal(
+  (await fetch(origin, { redirect: "manual" })).status,
+  publicCheck ? 200 : 302,
+);
+const glow = review.glowForAllRegisteredPlayers === true;
+const env = parseEnv(
+  readFileSync(
+    glow ? "apps/web/.env.local" : "apps/web/.env.staging.local",
+    "utf8",
+  ),
+);
 assert.equal(
   env.NEXT_PUBLIC_SUPABASE_URL,
-  "https://nisviqoxcfbtwccdjqoz.supabase.co",
+  glow
+    ? "https://frbbhbkwtgqczdjfhedi.supabase.co"
+    : "https://nisviqoxcfbtwccdjqoz.supabase.co",
 );
 const admin = createClient(
   env.NEXT_PUBLIC_SUPABASE_URL,
@@ -61,7 +79,7 @@ try {
   });
   // Keep the access token away from Supabase, RPCs and all third-party requests.
   await context.route("**/*", (route) =>
-    new URL(route.request().url()).origin === origin
+    !publicCheck && new URL(route.request().url()).origin === origin
       ? route.continue({
           headers: {
             ...route.request().headers(),
@@ -117,6 +135,10 @@ try {
   for (const path of ["/dashboard", "/wallet", "/settings", "/adventure"]) {
     await page.goto(origin + path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    if (glow && path === "/adventure")
+      await expect(
+        page.getByRole("link", { name: "Start game", exact: true }),
+      ).toHaveAttribute("href", "/adventure/play");
     for (const width of [1280, 390]) {
       await page.setViewportSize({ width, height: 900 });
       const result = await new AxeBuilder({ page })
@@ -160,16 +182,17 @@ try {
     assert.ifError(result.error);
   }
   writeFileSync(
-    "test-results/hosting/browser-accounts.json",
+    `test-results/hosting/${publicCheck ? "public-" : ""}browser-accounts.json`,
     JSON.stringify(
       {
         checkedAt: new Date().toISOString(),
         origin,
         status,
+        protectionBypassUsed: !publicCheck,
         checks,
         fixtureRemoved: Boolean(fixtureId),
         evidenceLimit:
-          "Disposable Staging account; no user credentials, screenshots, recordings or real wallet transactions.",
+          "Disposable account only; no user credentials, screenshots, recordings or real wallet transactions.",
       },
       null,
       2,

@@ -179,6 +179,8 @@ async function fixture() {
     403,
     "aal1 must not access private profiles",
   );
+  if (process.env.TEST_GLOW_ACCESS === "true")
+    assert.equal((await call("/api/payments/pending")).status, 403);
   if (process.env.TEST_ACCOUNT_DATA === "true") {
     assert.equal((await call("/api/account/data")).status, 403);
     assert.equal((await call("/api/account/deletion")).status, 403);
@@ -229,6 +231,21 @@ try {
         ).status,
         404,
       );
+    if (process.env.TEST_GLOW_ACCESS === "true") {
+      const page = await fetch(`${origin}/adventure`, {
+        headers: {
+          cookie: [...account.cookies].map(([n, v]) => `${n}=${v}`).join("; "),
+        },
+      });
+      assert.equal(page.status, 200);
+      assert.match(await page.text(), /href="\/adventure\/play"/);
+      const pending = await account.call("/api/payments/pending");
+      assert.equal(pending.status, 403);
+      assert.equal(
+        pending.data.error,
+        "Verify wallet ownership in Settings first.",
+      );
+    }
   }
   console.log("PASS: both new players are denied every developer route.");
   assert.equal(
@@ -344,6 +361,41 @@ try {
       .status,
     200,
   );
+  if (process.env.TEST_GLOW_ACCESS === "true") {
+    const pending = await a.call("/api/payments/pending");
+    assert.equal(pending.status, 200);
+    assert.equal(pending.data.plan, null);
+    if (process.env.TEST_GLOW_REVIEW === "true") {
+      const review = await a.call("/api/payments/review", {
+        kind: "entry",
+        classId: "warrior",
+      });
+      assert.equal(
+        review.status,
+        200,
+        "An ordinary linked player can review real GLOW entry.",
+      );
+      assert.equal(review.data.chainId, 11155111);
+      assert.equal(
+        review.data.wallet.toLowerCase(),
+        wallet.address.toLowerCase(),
+      );
+      assert.equal(
+        review.data.contract.toLowerCase(),
+        "0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb",
+      );
+      assert.equal(
+        (await a.call("/api/payments/pending")).data.plan.paymentId,
+        review.data.paymentId,
+      );
+      console.log(
+        "PASS: ordinary player receives and recovers a real Sepolia entry plan; no payment is sent.",
+      );
+    }
+    console.log(
+      "PASS: ordinary players can open real GLOW play; linked players reach payment recovery without developer status. TOTP and wallet ownership remain required.",
+    );
+  }
   assert.equal(
     (await a.call("/api/wallet/verify", { id: challenge.data.id, signature }))
       .status,
@@ -456,6 +508,8 @@ try {
     }
   }
   checked(await a.client.auth.mfa.unenroll({ factorId: a.factorId }));
+  if (process.env.TEST_GLOW_ACCESS === "true")
+    assert.equal((await a.call("/api/payments/pending")).status, 403);
   assert.equal(
     (await a.call("/api/profile")).status,
     403,

@@ -54,8 +54,24 @@ export function verifyHostedGame(root, environment = process.env) {
         "utf8",
       ),
     )
-  )
-    throw new Error("Paid release still requires a separate reviewed rollout.");
+  ) {
+    if (!stagedReview || environment.LANTERN_GLOW_REVIEW !== "true")
+      throw new Error(
+        "GLOW hosting requires the protected working-service review workflow.",
+      );
+    const review = JSON.parse(
+      readFileSync(resolve(root, "release-manifest.json"), "utf8"),
+    );
+    if (
+      review.paidRelease !== true ||
+      review.purpose !== "protected-glow-review" ||
+      environment.NEXT_PUBLIC_SUPABASE_URL !==
+        "https://frbbhbkwtgqczdjfhedi.supabase.co"
+    )
+      throw new Error(
+        "GLOW hosting requires the protected working-service review workflow.",
+      );
+  }
   return { files: paths.length };
 }
 

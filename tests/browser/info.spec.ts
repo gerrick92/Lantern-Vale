@@ -15,7 +15,7 @@ test("Info keeps details optional and distinguishes draft economics from practic
   await summary.focus();
   await page.keyboard.press("Enter");
   await expect(page.locator("#tokens .info-notice")).toContainText(
-    "player testing before public release",
+    "Every registered player can link a wallet",
   );
   await expect(page.locator(".supply-figure")).toContainText("1,000,000");
   await expect(page.locator(".claim-limits")).toContainText("5 GLOW");
@@ -26,7 +26,7 @@ test("Info keeps details optional and distinguishes draft economics from practic
   ).toBeVisible();
   await expect(page.locator("#tokens")).toContainText("chain ID 11155111");
   await expect(page.locator("#tokens")).toContainText(
-    "Etherscan source verification is still pending",
+    "exact source matches on Etherscan and Sourcify",
   );
   for (const link of await page.locator("#tokens a.address").all()) {
     const address = await link.innerText();
@@ -59,11 +59,11 @@ test("Info keeps details optional and distinguishes draft economics from practic
   await page.locator("#roadmap summary").click();
   await expect(
     page.locator(".roadmap-trail [aria-current='step']"),
-  ).toContainText("Current · player testing");
+  ).toContainText("Welcome new players");
   await expect(
     page.locator(".roadmap-trail [aria-current='step']"),
   ).toHaveCount(1);
-  await expect(page.locator("#roadmap")).toContainText("Next · public launch");
+  await expect(page.locator("#roadmap")).toContainText("Play with friends");
   await expect(page.locator("#roadmap")).not.toContainText("Available locally");
   await expect(page.locator("#roadmap")).not.toContainText("Status reviewed");
   await expect(page.locator("#tokens details")).toHaveAttribute("open", "");

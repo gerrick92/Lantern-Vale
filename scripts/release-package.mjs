@@ -18,6 +18,16 @@ import {
 } from "./verify-package.mjs";
 
 verifyGame(); // Refuse missing, stale or altered runtime assets before copying.
+const paidRelease = process.argv.includes("--glow-review");
+if (
+  !paidRelease &&
+  /paidEconomyReady: boolean = true;/.test(
+    readFileSync("apps/web/src/lib/economy-release.ts", "utf8"),
+  )
+)
+  throw new Error(
+    "GLOW is enabled. Explicitly pass --glow-review to package this application for protected review.",
+  );
 const source = resolve(".");
 const output = resolve("test-results/release");
 mkdirSync(output, { recursive: true });
@@ -96,7 +106,7 @@ write(
   "README.md",
   `# Lantern Vale — private application review bundle
 
-This bundle contains the Next.js application source and the complete finished RPG Maker MZ game. It is not a public deployment approval or an editor asset library. Paid play and packaged practice remain disabled. Existing local practice in the authoring repository is unchanged.
+This bundle contains the Next.js application source and the complete finished RPG Maker MZ game. It is not a public deployment approval or an editor asset library. ${paidRelease ? "GLOW gameplay is enabled for every registered player who completes TOTP and links a wallet. Upload only through the protected working-service review workflow." : "GLOW gameplay remains disabled."} Packaged practice remains disabled. Existing local practice in the authoring repository is unchanged.
 
 Verify with Node 24: \`node scripts/verify-package.mjs\`. Install pinned dependencies with \`npm ci\`, then use \`npm run build\` and \`npm start\` for the application. Dependencies must be downloaded or available in your npm cache; this is not an offline Node dependency installer. Copy the empty environment example to \`apps/web/.env.local\` and configure approved services as described in docs/SETUP.md. No accounts, credentials, owner ID or signer are included. No migrations run automatically. Production developer routes remain unavailable.
 
@@ -111,7 +121,16 @@ const files = packageFiles(target).map((path) => {
 });
 write(
   "release-manifest.json",
-  JSON.stringify({ format: 1, paidRelease: false, files }, null, 2) + "\n",
+  JSON.stringify(
+    {
+      format: 1,
+      paidRelease,
+      ...(paidRelease ? { purpose: "protected-glow-review" } : {}),
+      files,
+    },
+    null,
+    2,
+  ) + "\n",
 );
 const verified = verifyPackage(target);
 if (process.platform !== "win32")

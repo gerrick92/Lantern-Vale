@@ -1,0 +1,12 @@
+{
+  "network": "Ethereum Sepolia",
+  "chainId": 11155111,
+  "url": "https://lantern-vale.vercel.app",
+  "deploymentId": "dpl_8XjJiSECnxGzRMf9tafgMNfGnXn2",
+  "verifiedAt": "2026-10-27T09:39:48.403Z",
+  "glowForAllRegisteredPlayers": true,
+  "developerTools": "Unavailable in production",
+  "hostingPlan": "Vercel Hobby",
+  "packageManifestSha256": "067e03d77db9f2ad7c0e98da99693b0867af048984ef198376b7542cf402854a",
+  "evidence": "Public-origin signup, TOTP, RLS, SIWE and ordinary-player entry reviews pass. No live friend-wallet payment is claimed by those fixtures."
+}

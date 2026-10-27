@@ -1,0 +1,37 @@
+{
+  "checkedAt": "2026-10-27T08:43:24.538Z",
+  "chainId": 11155111,
+  "method": "Official Etherscan Standard JSON form; public source-page badges independently checked with HTTPS GET",
+  "contracts": [
+    {
+      "name": "SLMSToken",
+      "address": "0x5833635b652e3b93D39E0895B9C82891C6BB626b",
+      "url": "https://sepolia.etherscan.io/address/0x5833635b652e3b93D39E0895B9C82891C6BB626b#code",
+      "status": "PASS",
+      "match": "Exact Match",
+      "compiler": "v0.8.30+commit.73712a01",
+      "license": "MIT",
+      "standardInputSha256": "5c1a7feaffacf3d64b7ab5b7b703ae45afc2f5d9df282a6b7816f3af94992bf8"
+    },
+    {
+      "name": "SLMSFaucet",
+      "address": "0xb0bbbDCbdE6D89F40208641D608F22A3F1352BfA",
+      "url": "https://sepolia.etherscan.io/address/0xb0bbbDCbdE6D89F40208641D608F22A3F1352BfA#code",
+      "status": "PASS",
+      "match": "Exact Match",
+      "compiler": "v0.8.30+commit.73712a01",
+      "license": "MIT",
+      "standardInputSha256": "b59c9dc36244182e3f9bcb071b6723fbd25e5c9130276201bdfee1a44fc71942"
+    },
+    {
+      "name": "LanternGameEconomy",
+      "address": "0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb",
+      "url": "https://sepolia.etherscan.io/address/0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb#code",
+      "status": "PASS",
+      "match": "Exact Match",
+      "compiler": "v0.8.30+commit.73712a01",
+      "license": "MIT",
+      "standardInputSha256": "2537b10b8c03d14549656b2d21146d33e765ab0e4c4ab84de8ccccfa0340cc08"
+    }
+  ]
+}

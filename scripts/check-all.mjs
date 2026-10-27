@@ -2,8 +2,8 @@ import { spawn } from "node:child_process";
 import { resolve } from "node:path";
 
 const args = process.argv.slice(2);
-if (args.some((arg) => !["--offline", "--list"].includes(arg)))
-  throw new Error("Supported options: --offline, --list.");
+if (args.some((arg) => !["--offline", "--list", "--glow-review"].includes(arg)))
+  throw new Error("Supported options: --offline, --list, --glow-review.");
 const offline = args.includes("--offline");
 
 const stages = [
@@ -31,11 +31,22 @@ if (!npm) throw new Error("Run with npm run test:offline or npm run test:all.");
 
 for (const name of stages) {
   console.log(`\nChecking ${name}...`);
-  const child = spawn(process.execPath, [npm, "run", name], {
-    cwd: resolve("."),
-    env: process.env,
-    stdio: "inherit",
-  });
+  const child = spawn(
+    process.execPath,
+    [
+      npm,
+      "run",
+      name,
+      ...(name === "release:package" && args.includes("--glow-review")
+        ? ["--", "--glow-review"]
+        : []),
+    ],
+    {
+      cwd: resolve("."),
+      env: process.env,
+      stdio: "inherit",
+    },
+  );
   const code = await new Promise((resolve, reject) => {
     child.once("error", reject);
     child.once("exit", resolve);

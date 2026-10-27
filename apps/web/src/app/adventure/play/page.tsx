@@ -10,7 +10,7 @@ export default async function Play({
 }) {
   const { round } = await searchParams;
   const user = await currentUser();
-  const enabled = !!user && canUseGlow(user.id);
+  const enabled = !!user && canUseGlow();
   return (
     <>
       <p className="eyebrow">The forest remembers your footsteps</p>

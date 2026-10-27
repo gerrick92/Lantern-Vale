@@ -105,7 +105,7 @@ it("checks SQL and configuration files for credentials without rejecting applied
   }
 });
 
-function fixture() {
+function fixture(glow = false) {
   mkdirSync("test-results/package-fixtures", { recursive: true });
   const root = mkdtempSync(resolve("test-results/package-fixtures/review-"));
   const files: Record<string, string> = Object.fromEntries(
@@ -122,7 +122,7 @@ function fixture() {
     ].map((path) => [path, "Local verifier fixture"]),
   );
   files["apps/web/src/lib/economy-release.ts"] =
-    "export const paidEconomyReady: boolean = false;";
+    `export const paidEconomyReady: boolean = ${glow};`;
   files["apps/web/public/games/mosslight/js/practice-config.js"] =
     "window.MOSSLIGHT_PRACTICE_ENABLED = false;";
   const entry = (path: string) => ({
@@ -141,7 +141,8 @@ function fixture() {
   );
   files["release-manifest.json"] = JSON.stringify({
     format: 1,
-    paidRelease: false,
+    paidRelease: glow,
+    ...(glow ? { purpose: "protected-glow-review" } : {}),
     files: Object.keys(files).sort().map(entry),
   });
   for (const [path, text] of Object.entries(files)) {
@@ -150,6 +151,19 @@ function fixture() {
   }
   return root;
 }
+
+it("permits an explicit protected GLOW package without bypassing its manifest", () => {
+  const root = fixture(true);
+  expect(verifyPackage(root).paidRelease).toBe(true);
+  const path = resolve(root, "release-manifest.json");
+  const manifest = JSON.parse(readFileSync(path, "utf8"));
+  delete manifest.purpose;
+  writeFileSync(path, JSON.stringify(manifest));
+  expect(() => verifyPackage(root)).toThrow("Invalid review manifest");
+  manifest.paidRelease = false;
+  writeFileSync(path, JSON.stringify(manifest));
+  expect(() => verifyPackage(root)).toThrow("availability differs");
+});
 
 it("checks every packaged byte and rejects missing game files or unlisted configuration", () => {
   const root = fixture();

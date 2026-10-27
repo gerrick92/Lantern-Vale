@@ -103,7 +103,11 @@ export function verifyPackage(root) {
   );
   if (
     manifest.format !== 1 ||
-    manifest.paidRelease !== false ||
+    (manifest.paidRelease !== false &&
+      !(
+        manifest.paidRelease === true &&
+        manifest.purpose === "protected-glow-review"
+      )) ||
     !Array.isArray(manifest.files)
   )
     throw new Error("Invalid review manifest.");
@@ -136,12 +140,12 @@ export function verifyPackage(root) {
     if (!actual.includes(required))
       throw new Error(`Missing package dependency or notice: ${required}`);
   if (
-    !/paidEconomyReady: boolean = false/.test(
+    !new RegExp(`paidEconomyReady: boolean = ${manifest.paidRelease};`).test(
       read("apps/web/src/lib/economy-release.ts"),
     )
   )
     throw new Error(
-      "Paid release must remain disabled in this review package.",
+      "GLOW availability differs from the reviewed package manifest.",
     );
   if (
     read("apps/web/public/games/mosslight/js/practice-config.js").trim() !==
@@ -165,6 +169,7 @@ export function verifyPackage(root) {
       throw new Error(`Finished game checksum mismatch: ${item.path}`);
   }
   return {
+    paidRelease: manifest.paidRelease,
     files: actual.length,
     bytes: manifest.files.reduce((sum, item) => sum + item.bytes, 0),
     manifestSha256: digest(

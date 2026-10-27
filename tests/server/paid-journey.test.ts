@@ -56,7 +56,6 @@ vi.mock("server-only", () => ({}));
 vi.mock("@/server/game-recovery", () => ({
   retainGameplay: (userId: string) => f.retain(userId),
 }));
-vi.mock("@/lib/economy-release", () => ({ paidEconomyReady: true })); // Test module only; the application gate stays false.
 vi.mock("@/server/blockchain", () => ({ chainClient: () => f.rpc }));
 vi.mock("@/lib/chain", () => ({
   CHAIN_ID: 11155111,

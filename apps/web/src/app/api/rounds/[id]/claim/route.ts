@@ -12,7 +12,7 @@ export async function POST(
   return endpoint(async () => {
     checkOrigin(request);
     const { user } = await requireUser();
-    if (!canUseGlow(user.id)) throw new ApiError(503, economyReleaseMessage);
+    if (!canUseGlow()) throw new ApiError(503, economyReleaseMessage);
     await rateLimit(user.id, "settlement", 6);
     const { id } = await params;
     const round = await ownedRound(id, user.id);

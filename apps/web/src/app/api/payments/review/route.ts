@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   return endpoint(async () => {
     checkOrigin(request);
     const { user } = await requireUser();
-    if (!canUseGlow(user.id)) throw new ApiError(503, economyReleaseMessage);
+    if (!canUseGlow()) throw new ApiError(503, economyReleaseMessage);
     await rateLimit(user.id, "payment-review", 20);
     await retainGameplay(user.id);
     const body = await readBody(

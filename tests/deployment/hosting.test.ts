@@ -72,7 +72,32 @@ it("refuses a practice-enabled export or an unreviewed paid rollout", () => {
     resolve(root, "apps/web/src/lib/economy-release.ts"),
     "export const paidEconomyReady: boolean = true;",
   );
-  expect(() => verifyHostedGame(root)).toThrow("separate reviewed rollout");
+  expect(() => verifyHostedGame(root)).toThrow(
+    "protected working-service review",
+  );
+  writeFileSync(
+    resolve(root, "release-manifest.json"),
+    JSON.stringify({
+      paidRelease: true,
+      purpose: "protected-glow-review",
+    }),
+  );
+  const approved = {
+    VERCEL_ENV: "production",
+    LANTERN_STAGED_REVIEW: "true",
+    LANTERN_GLOW_REVIEW: "true",
+    NEXT_PUBLIC_SUPABASE_URL: "https://frbbhbkwtgqczdjfhedi.supabase.co",
+  };
+  expect(verifyHostedGame(root, approved)).toEqual({ files: 6 });
+  expect(() =>
+    verifyHostedGame(root, {
+      ...approved,
+      NEXT_PUBLIC_SUPABASE_URL: "https://nisviqoxcfbtwccdjqoz.supabase.co",
+    }),
+  ).toThrow("protected working-service review");
+  expect(() =>
+    verifyHostedGame(root, { ...approved, LANTERN_GLOW_REVIEW: "false" }),
+  ).toThrow("protected working-service review");
 });
 
 it("blocks an unexpected production target before the hosted app can build", () => {

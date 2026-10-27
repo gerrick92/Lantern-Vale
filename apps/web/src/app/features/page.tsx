@@ -33,15 +33,16 @@ export default function Information() {
               turn-based battles, hidden paths and a final boss.
             </p>
             <p>
-              Sign in and complete Google Authenticator verification to play.
-              Test mode starts with 30 practice tokens. Entry costs one token
-              after choosing a class. Victory returns everything you used, plus
-              one bonus token, or two for defeating every enemy and the boss.
-              Defeat loses only the tokens used.
+              Register with your email and password, complete Google
+              Authenticator setup and link MetaMask. Entry costs 1 GLOW after
+              choosing a class. Victory returns everything you used, plus 1
+              bonus GLOW, or 2 for defeating every enemy and the boss. Defeat
+              loses only the tokens used.
             </p>
             <p>
-              GLOW adventures are in player testing before public release.
-              Practice counters and Sepolia test tokens have no monetary value.
+              GLOW adventures are available to every registered player. No
+              developer account or invitation is needed. Sepolia test tokens
+              have no monetary value.
             </p>
             <Link href="/adventure" className="inline-link">
               Go to Play
@@ -97,8 +98,8 @@ export default function Information() {
               </strong>{" "}
               GLOW is Lantern Vale’s ERC-20 test token on Ethereum Sepolia. The
               figures below describe the initial allocation and approved game
-              rules. GLOW adventures are in player testing before public
-              release.
+              rules. Every registered player can link a wallet, claim from the
+              faucet and play GLOW adventures.
             </p>
             <h3>Network and contracts</h3>
             <p>Ethereum Sepolia · chain ID 11155111 · 18 decimals</p>
@@ -128,9 +129,9 @@ export default function Information() {
               ))}
             </dl>
             <p className="info-note">
-              Explorer links show the configured addresses. The contracts&apos;
-              sources have exact Sourcify matches; Etherscan source verification
-              is still pending.
+              The deployed GLOW, faucet and game contracts have exact source
+              matches on Etherscan and Sourcify. Open an explorer link to read
+              their code. Source verification is not a security audit.
             </p>
             <h3>How many tokens?</h3>
             <figure className="supply-figure">
@@ -193,7 +194,7 @@ export default function Information() {
                   <dd>{tokenCount(tokenPlan.ownerAllocation)} GLOW</dd>
                 </div>
                 <div>
-                  <dt>Reward pool · funding to be agreed</dt>
+                  <dt>Reward pool · funded separately</dt>
                   <dd>{tokenCount(tokenPlan.rewardPool)} GLOW</dd>
                 </div>
                 <div>
@@ -206,9 +207,9 @@ export default function Information() {
               {deployed
                 ? "The initial mint funded the faucet with 5,000 GLOW. These figures record that allocation; current balances change as wallets claim tokens."
                 : "These are planned allocations, not live balances. The first deployment will fund only the faucet."}{" "}
-              Game reward funding needs a separate reviewed plan. Faucet claims
-              and rewards transfer existing pool tokens; they do not mint new
-              ones. An empty pool cannot pay out.
+              A subsequent mint funded the game reserve with 100 GLOW. Faucet
+              claims and rewards transfer existing pool tokens; they do not mint
+              new ones. An empty pool cannot pay out.
             </p>
 
             <h3>How much can I claim per day?</h3>
@@ -228,7 +229,7 @@ export default function Information() {
                 </p>
               </section>
               <section>
-                <h4>Game bonuses · player testing</h4>
+                <h4>Game bonuses</h4>
                 <p className="info-number">
                   {tokenCount(tokenPlan.dailyBonusLimit)}{" "}
                   <span>GLOW maximum per 24 hours</span>
@@ -319,9 +320,8 @@ export default function Information() {
               settlements remain available while paused. A separate reward
               signer is required. The new settlement design has no administrator
               withdrawal of player deposits. It depends on a server signer to
-              verify outcomes; signer recovery and independent security review
-              remain release gates. These are administrator powers, not
-              community votes.
+              verify outcomes. No independent security audit is claimed. These
+              are administrator powers, not community votes.
             </p>
           </div>
         </details>
@@ -445,30 +445,28 @@ export default function Information() {
                     </p>
                   </div>
                 </li>
-                <li aria-current="step">
+                <li>
                   <RpgIcon name="shield" />
                   <div>
-                    <span className="roadmap-state">
-                      Current · player testing
-                    </span>
+                    <span className="roadmap-state">Complete</span>
                     <h3>GLOW adventures</h3>
                     <p>
-                      The first owner entry, purchase and full-clear payout are
-                      verified on Sepolia. Both optional encounters passed the
-                      owner’s live playtest. Defeat, recovery and independent
-                      player checks continue before the public launch.
+                      Entry, purchases, full victory returns and defeat
+                      recycling are verified on Sepolia. GLOW play is open to
+                      every registered player with an authenticator and linked
+                      wallet. Developer tools remain private.
                     </p>
                   </div>
                 </li>
-                <li>
+                <li aria-current="step">
                   <RpgIcon name="home" />
                   <div>
-                    <span className="roadmap-state">Next · public launch</span>
+                    <span className="roadmap-state">Play with friends</span>
                     <h3>Welcome new players</h3>
                     <p>
-                      The complete app is running in a protected cloud review.
-                      Registration and authenticator setup pass there. Finish
-                      live player checks, then open the vale to everyone.
+                      Create an account, set up your authenticator and link
+                      MetaMask. Claim GLOW from the faucet and start your
+                      adventure. New players never need developer access.
                     </p>
                   </div>
                 </li>

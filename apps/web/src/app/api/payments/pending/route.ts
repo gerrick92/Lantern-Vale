@@ -7,7 +7,7 @@ import { retainGameplay } from "@/server/game-recovery";
 export async function GET() {
   return endpoint(async () => {
     const { user } = await requireUser();
-    if (!canUseGlow(user.id)) throw new ApiError(503, economyReleaseMessage);
+    if (!canUseGlow()) throw new ApiError(503, economyReleaseMessage);
     await rateLimit(user.id, "pending-payment", 30);
     await retainGameplay(user.id);
     const wallet = await linkedWallet(user.id);

@@ -12,7 +12,7 @@ export default async function Adventure({
 }) {
   const history = (await searchParams).view === "history";
   const user = await currentUser();
-  const enabled = !!user && canUseGlow(user.id);
+  const enabled = !!user && canUseGlow();
   return (
     <>
       <h1>Play</h1>
@@ -75,7 +75,7 @@ export default async function Adventure({
                 <p id="glow-availability" className="small-note">
                   {enabled
                     ? "Entry and each purchase use 1 Sepolia GLOW."
-                    : "GLOW mode is not available yet."}
+                    : "GLOW mode is temporarily unavailable."}
                 </p>
                 {process.env.NODE_ENV !== "development" && (
                   <p id="test-availability" className="small-note">
@@ -93,21 +93,23 @@ export default async function Adventure({
               </p>
               <h3>Tokens</h3>
               <p>
-                In Test mode, you begin with 30 practice tokens. Choosing your
-                class spends one token on entry. At the inn, spend more on
-                equipment, supplies and rest to improve your chances.
+                Choosing your class costs 1 GLOW. Each purchase, optional
+                encounter or rest costs another 1 GLOW. Prepare at the inn with
+                equipment, supplies and spells suited to your class.
               </p>
               <p>
-                Defeat the boss and your spent practice tokens are refunded.
-                Lose or abandon the run and that spending is lost; unspent
-                tokens are untouched. For example, spending five tokens and
-                losing costs five tokens. Victory adds one bonus token, or two
-                in total if you defeat every normal enemy and the boss.
+                Defeat the boss to receive every GLOW used in the round, plus 1
+                bonus GLOW, or 2 in total for defeating all normal enemies and
+                the boss. Bonuses are limited to 10 GLOW per wallet over a
+                rolling 24 hours. Lose the round and only the GLOW you used is
+                lost; unspent wallet tokens remain yours.
               </p>
               <p>
-                Practice tokens stay in the test game. GLOW uses Sepolia test
-                tokens with no monetary value; its payments and rewards are not
-                available yet.
+                Register, complete Google Authenticator setup and link MetaMask
+                to play. Claim 5 GLOW from the Dashboard faucet every 24 hours
+                while its pool is funded. Sepolia test ETH pays network fees.
+                GLOW has no monetary value. Local Test mode uses 30 separate
+                practice counters.
               </p>
               <h3>Controls</h3>
               <p>

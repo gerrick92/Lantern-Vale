@@ -48,6 +48,11 @@ it("requests no custom-domain assignment and keeps secrets out of command argume
     "SUPABASE_SECRET_KEY",
     "NEXT_PUBLIC_SUPABASE_URL",
     "LANTERN_STAGED_REVIEW",
+    "LANTERN_GLOW_REVIEW",
+    "SEPOLIA_GAME_ECONOMY_ADDRESS",
+    "SETTLEMENT_SIGNER_TOKEN",
+    "GAME_RECOVERY_SECRET",
+    "GAME_RECOVERY_KEY",
   ]);
   expect(args).toContain("--skip-domain");
   expect(args).toContain("--prod");
@@ -57,6 +62,11 @@ it("requests no custom-domain assignment and keeps secrets out of command argume
   expect(buildKeys).toEqual([
     "NEXT_PUBLIC_SUPABASE_URL",
     "LANTERN_STAGED_REVIEW",
+    "LANTERN_GLOW_REVIEW",
+    "SEPOLIA_GAME_ECONOMY_ADDRESS",
   ]);
   expect(buildKeys).not.toContain("SUPABASE_SECRET_KEY");
+  expect(buildKeys).not.toContain("SETTLEMENT_SIGNER_TOKEN");
+  expect(buildKeys).not.toContain("GAME_RECOVERY_SECRET");
+  expect(buildKeys).not.toContain("GAME_RECOVERY_KEY");
 });

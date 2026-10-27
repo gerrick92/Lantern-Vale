@@ -46,7 +46,12 @@ export function reviewArguments(packageRoot, keys) {
     ...keys
       .filter(
         (key) =>
-          key.startsWith("NEXT_PUBLIC_") || key === "LANTERN_STAGED_REVIEW",
+          key.startsWith("NEXT_PUBLIC_") ||
+          [
+            "LANTERN_STAGED_REVIEW",
+            "LANTERN_GLOW_REVIEW",
+            "SEPOLIA_GAME_ECONOMY_ADDRESS",
+          ].includes(key),
       )
       .flatMap((key) => ["--build-env", key]),
   ];
@@ -54,16 +59,22 @@ export function reviewArguments(packageRoot, keys) {
 
 async function main() {
   const deploy = process.argv.includes("--deploy");
+  const glow = process.argv.includes("--glow");
+  const publicOrigin = process.argv.includes("--public-origin");
+  if (publicOrigin && !glow)
+    throw new Error("The public origin requires the working GLOW services.");
   const latest = JSON.parse(
     readFileSync(resolve(root, "test-results/release/latest.json"), "utf8"),
   );
   const packageRoot = resolve(latest.directory);
   const verified = verifyPackage(packageRoot);
+  if (verified.paidRelease !== glow)
+    throw new Error("Select a package whose GLOW mode matches --glow.");
   const project = await vercel(`/v9/projects/${projectId}`);
   const team = await vercel(`/v2/teams/${teamId}`);
   checkReviewProject(project, team);
-  // Read only the approved staging connection. Never import owner, signer or
-  // recovery credentials into this review deployment or upload directory.
+  // Select only the service explicitly requested for this protected deployment.
+  // Credentials are never copied into the upload directory.
   const staging = parseEnv(
     readFileSync(resolve(root, "apps/web/.env.staging.local"), "utf8"),
   );
@@ -75,12 +86,20 @@ async function main() {
     "https://nisviqoxcfbtwccdjqoz.supabase.co"
   )
     throw new Error("Expected the separate staging database.");
+  const service = glow ? configured : staging;
+  if (
+    glow &&
+    configured.NEXT_PUBLIC_SUPABASE_URL !==
+      "https://frbbhbkwtgqczdjfhedi.supabase.co"
+  )
+    throw new Error("Expected the existing working game database.");
   const environment = {
     LANTERN_STAGED_REVIEW: "true",
-    NEXT_PUBLIC_SUPABASE_URL: staging.NEXT_PUBLIC_SUPABASE_URL,
+    ...(glow ? { LANTERN_GLOW_REVIEW: "true" } : {}),
+    NEXT_PUBLIC_SUPABASE_URL: service.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
-      staging.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
-    SUPABASE_SECRET_KEY: staging.SUPABASE_SECRET_KEY,
+      service.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    SUPABASE_SECRET_KEY: service.SUPABASE_SECRET_KEY,
     NEXT_PUBLIC_TOKEN_ADDRESS: configured.NEXT_PUBLIC_TOKEN_ADDRESS,
     NEXT_PUBLIC_FAUCET_ADDRESS: configured.NEXT_PUBLIC_FAUCET_ADDRESS,
     NEXT_PUBLIC_DEPLOYMENT_BLOCK: configured.NEXT_PUBLIC_DEPLOYMENT_BLOCK,
@@ -92,8 +111,42 @@ async function main() {
       "https://ethereum-sepolia-rpc.publicnode.com",
     REWARDS_ENABLED: "false",
   };
+  if (glow) {
+    // Only adapters required by the existing game. Never copy owner identity,
+    // private signing keys, database passwords or unrelated configuration.
+    for (const key of [
+      "SEPOLIA_GAME_ECONOMY_ADDRESS",
+      "SEPOLIA_GAME_DEPLOYMENT_BLOCK",
+      "SETTLEMENT_SIGNER_URL",
+      "SETTLEMENT_SIGNER_TOKEN",
+      "GAME_RECOVERY_URL",
+      "GAME_RECOVERY_SECRET",
+      "GAME_RECOVERY_KEY",
+      "GAME_RECOVERY_STREAM",
+    ])
+      environment[key] = configured[key];
+    if (
+      environment.GAME_RECOVERY_URL !== staging.NEXT_PUBLIC_SUPABASE_URL ||
+      environment.SETTLEMENT_SIGNER_URL !==
+        `${configured.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/settlement-signer`
+    )
+      throw new Error("The existing signer/recovery services do not match.");
+  }
   if (Object.values(environment).some((value) => !value))
     throw new Error("An approved review connection value is missing.");
+  if (publicOrigin) {
+    const domains = await vercel(`/v9/projects/${projectId}/domains`);
+    if (
+      !domains.domains?.some(
+        (domain) =>
+          domain.name === "lantern-vale.vercel.app" &&
+          domain.verified &&
+          !domain.redirect,
+      )
+    )
+      throw new Error("The existing free public domain is not verified.");
+    environment.APP_ORIGIN = "https://lantern-vale.vercel.app";
+  }
   const existing = (await vercel(`/v9/projects/${projectId}/env`)).envs;
   if (existing.some((entry) => entry.target?.includes("production")))
     throw new Error(
@@ -108,6 +161,8 @@ async function main() {
       policyUnchanged: true,
       publicDomainAssigned: false,
       deploy,
+      glowForAllRegisteredPlayers: glow,
+      applicationOrigin: environment.APP_ORIGIN || "deployment URL",
     }),
   );
   if (!deploy) return;
@@ -181,6 +236,8 @@ async function main() {
     url,
     status: deployed.readyState,
     protectedReview: true,
+    glowForAllRegisteredPlayers: glow,
+    applicationOrigin: environment.APP_ORIGIN || url,
     publicDomainAssigned: false,
     packageManifestSha256: verified.manifestSha256,
   };

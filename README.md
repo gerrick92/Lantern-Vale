@@ -4,7 +4,7 @@ Lantern Vale is a turn-based fantasy RPG built in RPG Maker MZ, with a web app f
 
 [The game](#the-game) · [How to play](#how-to-play) · [GLOW](#glow) · [Tech stack](#tech-stack) · [Installation](#installation) · [Running locally](#running-locally) · [Testing](#testing) · [Contracts](#contracts) · [Project guide](#project-guide)
 
-**Release status:** the owner has played the GLOW game, completed both optional encounters and received a verified victory payout. The complete app now builds and runs on Vercel in a protected review deployment. Fresh registration, authenticator setup and private pages pass there at desktop and phone widths. Public GLOW play is awaiting the remaining live acceptance checks; there is no public play link yet. [Current checkpoint](PROJECT_SUMMARY.md) · [Roadmap](docs/ROADMAP.md)
+**[Play Lantern Vale](https://lantern-vale.vercel.app)** — a free Sepolia demo. Every registered player can use the real GLOW game after authenticator setup and wallet linking. Entry, purchases, victory payouts and defeat recycling are verified on Sepolia. [Current checkpoint](PROJECT_SUMMARY.md) · [Roadmap](docs/ROADMAP.md)
 
 ## The game
 
@@ -89,6 +89,8 @@ if (-not (Test-Path -LiteralPath apps/web/.env.local)) {
 }
 ```
 
+Source: [gerrick92/Lantern-Vale](https://github.com/gerrick92/Lantern-Vale). A fresh clone contains the authored game data and plugins. The licensed finished-game export is supplied separately for deployment; the repository is not a standalone RPG Maker asset download.
+
 Configure `apps/web/.env.local` using [Setup](docs/SETUP.md). Privileged credentials stay server-only. Never put secrets in Git or chat. Existing accounts, contracts and authenticator factors do not need to be recreated.
 
 A source checkout omits RPG Maker’s licensed runtime assets. Restore the approved finished export or follow [the game build instructions](docs/GAME.md#authoring-and-export) using a licensed MZ installation. Players need neither RPG Maker nor Steam. Full map rebuilds overwrite authored data; preserve editor changes first.
@@ -119,7 +121,7 @@ npm run build
 npm start
 ```
 
-Stop the development server first; both use port 3000. Production keeps developer tools and unapproved play modes closed. Vercel hosting will let players visit without this PC running. [Hosting setup and release checks](docs/SETUP.md#vercel-hosting)
+Stop the development server first; both use port 3000. Production supports real GLOW gameplay for ordinary players. Developer tools and local practice stay closed. The public Vercel site runs without this PC being online. [Hosting setup and release checks](docs/SETUP.md#vercel-hosting)
 
 ## Testing
 
@@ -129,7 +131,7 @@ npm run lint
 npm test
 npm run contracts:test
 npm run game:verify
-npm run test:offline
+npm run test:offline -- --glow-review
 ```
 
 The offline workflow runs sequentially and needs its tools installed already. It does not sign MetaMask transactions or change hosted accounts. `npm run test:all` also includes disposable hosted-account checks; read [Testing](docs/TESTING.md) first. Reports belong in `test-results/`.
@@ -146,7 +148,7 @@ All three run on **Ethereum Sepolia · chain ID 11155111**.
 | Faucet          | [0xb0bbbDCbdE6D89F40208641D608F22A3F1352BfA](https://sepolia.etherscan.io/address/0xb0bbbDCbdE6D89F40208641D608F22A3F1352BfA) |
 | Game settlement | [0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb](https://sepolia.etherscan.io/address/0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb) |
 
-Exact Sourcify matches are recorded under `deployments/`. Etherscan source verification remains pending; explorer links do not imply it is complete.
+All three contracts have exact source matches on Etherscan and Sourcify. The public verification record, compiler version and submitted-input hashes are in [deployments/etherscan.json](deployments/etherscan.json). Source verification confirms matching code, not a security audit.
 
 For test ETH, choose a free faucet from [Ethereum’s Sepolia directory](https://ethereum.org/developers/docs/networks/#sepolia) and check the incoming balance. Provider requirements and cooldowns vary. GLOW comes separately from the Dashboard faucet and cannot pay gas.
 

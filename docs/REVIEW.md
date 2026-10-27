@@ -1,16 +1,38 @@
 # Implementation and architecture review
 
+## All-player GLOW access and public launch — 27 October 2026
+
+**PASS:** removed the developer-only gameplay exception. The actual release flag is enabled in development and production, with no account allowlist. Private API authentication, TOTP, SIWE ownership, payment receipts, replay protection and restricted signing are unchanged. Developer routes remain 404 in production. The full paid-journey suite now uses the actual release flag instead of mocking it open.
+
+**PASS, public origin:** https://lantern-vale.vercel.app serves deployment `dpl_8XjJiSECnxGzRMf9tafgMNfGnXn2` with the working Supabase/signer/recovery configuration. Fresh ordinary-player signup, TOTP, RLS, SIWE, entry-plan generation and recovery pass without a Vercel bypass. No wallet transaction was sent by these account fixtures. The public production domain is open; deployment URLs retain Vercel protection. Anonymous private APIs return 401, developer routes 404 and cross-origin mutations 403. Existing free services and local callbacks are preserved.
+
+**PASS, real combat loss:** contract round 5 reached zero HP through normal boss combat. Canonical settlement `0xd85b87d1432d08080601c9b64e57aeb6f88946ddfb4025b18516f76b4fdefaf3` at block 12004091 returned zero GLOW, awarded zero bonus and recycled its one-GLOW deposit to the faucet. This complements the recorded live full-clear victory and owner NPC checks.
+
+**PASS, automated verification:** the full unit/local integration run passed 315 cases; Windows sandbox permissions blocked the native database fixture. Its separate normal-permission rerun passed all four cases, completing the 317-case set. Types/lint, protected/public cloud account checks and browser QR/TOTP/layout checks pass. No professional security audit, physical-device certification or live friend-wallet payout is inferred from these tests.
+
+**Deployment controls:** automatic approval review rejected removing broad deployment safeguards and making enabled GLOW the default package mode. The accepted workflow keeps those safeguards and requires explicit `--glow-review`/`--glow` flags. The user separately approved working-service credentials in Vercel server-only storage. No private signing key, owner identity or credential enters the package/Git/browser bundle. After the protected tests passed, the previously authorized public release opened the production domain.
+
+Evidence: `deployments/web.json`, `test-results/hosting/public-release.json`, `public-hosted-accounts.json`, `public-browser-accounts.json`, `live-defeat.json`, `all-player-unit.json` and `all-player-native-backup.json`. Earlier sections below are dated historical checkpoints; their closed-gate statements are superseded by this all-player release.
+
 ## Protected cloud review — 27 October 2026
+
+**PASS, Etherscan:** the official Standard JSON form accepted all three contracts using compiler `v0.8.30+commit.73712a01` and the MIT license. Independent HTTPS reads confirm **Exact Match** badges on the GLOW, faucet and game source pages. `deployments/etherscan.json` records their public links and submitted-input SHA-256 hashes. This used no API subscription, new deployment or blockchain transaction. The earlier shared-mirror quota is no longer a blocker.
 
 **PASS, Vercel:** the complete application built successfully on the existing free Hobby plan. Deployment `dpl_9cM5f3KBsnoVQdBPuCbJw2JYHLyR` runs against the separate Staging database at `https://lantern-vale-qr00ub36k-lantern-vale.vercel.app`. It includes all 220 finished-game resources and notices. No owner key, signer key, recovery key or working-database credential is in the upload. Public GLOW and standalone practice remain disabled in this review.
 
 **PASS, hosted accounts and browser:** disposable public email/password registrations reach mandatory TOTP, the actual QR enrollment form accepts the fixture's authenticator code, and private account pages work at 1280px and 390px. Targeted axe checks find no violations. Two separate fixture accounts pass RLS/profile/contact isolation, SIWE verification and replay/takeover rejection, developer-route denial and immediate private-API denial after factor removal. Fixtures were removed afterward. These checks use no real wallet funds and do not replace friends' MetaMask testing.
 
-**Protection finding resolved for this deployment:** Vercel created a default project alias despite `--skip-domain`. That alias was briefly anonymously reachable, with only the closed-gate Staging application. It was removed immediately. A fresh read confirms no aliases, a Vercel sign-in redirect on the deployment URL and 404 on both project domains. Future review uploads now require all-deployment protection before starting; approval for that policy change is pending. No public release is claimed.
+**Protection finding resolved for this deployment:** Vercel created a default project alias despite `--skip-domain`. That alias was briefly anonymously reachable, with only the closed-gate Staging application. It was removed immediately. A fresh read confirms no aliases, a Vercel sign-in redirect on the deployment URL and 404 on both project domains. After explicit user approval, all-deployment protection was applied and independently verified on the free Hobby plan. Future review uploads require that protection before starting. No public release is claimed.
 
 **PASS, read-only Sepolia accounting:** at block 12003700 the game holds five GLOW in player escrow, six reserved for pending bonuses and 92 available for future bonuses. Its 103-GLOW total balance must not be presented as 103 available bonus GLOW. The contract remains unpaused for the existing controlled acceptance. No chain transaction was sent during this check.
 
-Evidence: `test-results/hosting/review-deployment.json`, `cloud-smoke.json`, `hosted-accounts.json`, `browser-accounts.json` and `game-accounting.json`. Reports are intentionally ignored. Etherscan submission, source publication and the remaining live acceptance checks are tracked in the roadmap.
+**PASS, source publication:** 395 files were audited and the exact Git index was checked before the initial `207febb` commit was pushed to [gerrick92/Lantern-Vale](https://github.com/gerrick92/Lantern-Vale). The earlier index was preserved locally. Credentials, backups, generated test reports, licensed runtime assets and the compiled launcher are excluded. Source for the launcher and original game authoring remains included. This targeted audit is not a guarantee against every possible credential format.
+
+**PASS, local verification:** TypeScript and ESLint pass. The full unit/local integration run passes 314 cases; its native PostgreSQL fixture could not start within the sandbox. A normal-permission isolated rerun passes all four backup cases, including the two initially skipped, completing the 316-case set. All 220 source/export game files still match their manifest, including the approved final cave.
+
+**BLOCKED, native accessibility follow-up:** Firefox is installed, but its launch through computer control timed out awaiting app approval. Its Accessibility Inspector was not exercised in this pass. NVDA was not found in the available application inventory. Both remain separate checks, alongside physical-device and independent-wallet testing.
+
+Evidence: `test-results/hosting/review-deployment.json`, `cloud-smoke.json`, `hosted-accounts.json`, `browser-accounts.json`, `game-accounting.json`, `unit-report.json` and `native-backup-report.json`; source manifests are under `test-results/source-review/`. Reports are intentionally ignored. Etherscan submission and the remaining live acceptance checks are tracked in the roadmap.
 
 ## Direct player registration — 27 October 2026
 
