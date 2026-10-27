@@ -1,139 +1,123 @@
 # Testing
 
-Protected cloud checks use `node tests/hosted/vercel.mjs` and `node tests/hosted/vercel-browser.mjs`. They require the already authorized local Vercel CLI, its private automation credential and the separate Staging environment. The credential is sent only to the exact review origin, never to Supabase or RPC hosts. These scripts create disposable accounts, remove them afterward and make no token transactions. They do not replace independent live-wallet acceptance.
+Run commands from the repository root. Local fixtures, hosted services and real wallet transactions provide different evidence. Tests never sign with a player's wallet or broadcast a deployment.
 
-Before publishing source, run `node scripts/review-source.mjs`. It audits existing nonignored source files and writes a hash manifest plus an explicit Git path list under `test-results/source-review/`. After staging only those reviewed paths, `node scripts/review-source.mjs --index` checks the actual staged bytes. Neither command stages, commits, uploads or deletes anything. The targeted pattern scan does not guarantee detection of every possible secret.
+## Local verification
 
-Run from the repository root. `npm test` runs Vitest, not Foundry or browsers. No test command broadcasts a deployment or signs with the user's wallet.
+```powershell
+npm run typecheck
+npm run typecheck:signer
+npm run lint
+npm run format:check
+npm test
+npm run contracts:test
+npm run game:verify
+```
 
-## Local-only verification
+`npm run test:offline -- --glow-review` runs the sequential local workflow: static checks, unit/database fixtures, contracts, export verification, build, packaging and isolated Chromium/Firefox tests. It stops on failure and needs no running app or hosted account. Dependencies, Solidity, browsers, licensed game resources and native database tools must already be available. This selects service-free tests; it is not an operating-system network sandbox. Use `npm run test:offline -- --list` to inspect the stages.
 
-`npm run launcher:test` separately builds the Windows launcher and runs four Node tests: prerequisite failures, safe detection of occupied ports, the real executable's check-only mode, and termination of an isolated child/grandchild process tree. It opens no browser and uses no hosted service. Fixtures remain under `test-results/launcher`. Default Playwright HTML reports now live under `test-results/browser-report`, separately from operational backups and release packages.
+Keep Vitest and Playwright at one worker. Run builds and browsers sequentially to limit memory use. A sandbox failure to start a database or browser is BLOCKED evidence; rerun the affected fixture with appropriate process permissions.
 
-`npm run test:offline -- --glow-review` runs application/signer types, lint, formatting, unit/local database tests, contract checks, existing game-export verification, the production build, private packaging and an explicit set of isolated Chromium/Firefox fixtures. It runs sequentially, stops at the first failure and does not require a running app server. Dependencies, Solidity compiler, browser binaries and native database tools must already be installed/cached. This is a service-free test selection, not an operating-system network sandbox.
+| Command                                                                         | Scope                                                           |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `npm test -- tests/game`                                                        | Rules, saves, maps and effects                                  |
+| `npm test -- tests/server`                                                      | Auth, receipts, signing, SQL/RLS and recovery                   |
+| `npm test -- tests/wallet`                                                      | Addresses, units, accounting and payment journals               |
+| `npm run contracts:coverage`                                                    | Instrumented Solidity coverage; inspect warnings                |
+| `npm run game:balance`                                                          | 11,232 simulations under a disclosed tactical policy            |
+| `npm run launcher:test`                                                         | Windows launcher build, prerequisites and child-process cleanup |
+| `npm run database:rehearse`                                                     | Populated legacy-schema upgrade and rollback in local fixtures  |
+| `npm run database:backup-test`                                                  | Synthetic native PostgreSQL/DPAPI capture and restore           |
+| `npm run recovery:drill`                                                        | Exact-checkpoint restore and interrupted paid journeys          |
+| `npm run release:package -- --glow-review`                                      | Complete game/application package and integrity checks          |
+| `npm test -- tests/deployment/package.test.ts tests/deployment/hosting.test.ts` | Package privacy and hosted build guards                         |
 
-`npm run test:offline -- --list` prints its stages without running them. `npm run test:e2e:offline` reruns just the isolated browser selection after a current package exists. It covers the actual exported game, NPC choreography, wallet confirmation refresh, private account UI, paid companion and owner deployment review with local fixtures. It does not rebuild maps/rules, create hosted users, sign MetaMask transactions or change provider settings. It does not replace real-service, public-origin or human checks. The full `test:all` command below includes hosted mutations and is **not an offline command**.
+Native backup fixtures require the reviewed Windows PostgreSQL tools in [Setup](SETUP.md#encrypted-hosted-backup-and-local-restore). Skipped cases are not a successful restore. Simulated win rates are not human difficulty measurements or an anti-bot assessment.
 
-The 25 October instruction audit passes this workflow: 260 unit/local integration cases, 31 Foundry cases and 38 isolated browser cases. Its first restricted Windows run could not start the native PostgreSQL fixture; all cases pass with normal process permissions. Keep those local process permissions distinct from permission to use external accounts or the desktop.
+## Browser tests
 
-`npx playwright test tests/browser/info.spec.ts` additionally checks the actual public Info page on a running app server. The audit passes all four Chromium/Firefox cases against a temporary production server. `fixtures/info.ts` gives each test a fresh anonymous browser process/profile because the bundled Firefox's shared-context shutdown failed with `Browser.removeBrowserContext` after real HTTP navigation. No assertions or production headers are bypassed. Temporary profiles are bounded to ignored test output and removed after the browser closes. Keep these tests anonymous; they do not use the user's browser profile or authenticator.
+Install browsers once:
 
-## Additional checks and evidence
+```powershell
+$env:PLAYWRIGHT_BROWSERS_PATH = "$PWD/.tools/browsers"
+npx playwright install chromium firefox
+```
 
-**27 October direct registration:** `node tests/hosted/registration.mjs --staging` and the same command without `--staging` test public signup without email delivery, duplicate protection, TOTP, repeat-login challenges and unchanged pre-existing accounts. `npm run test:hosted` now creates two users through public signup and verifies private data isolation, developer denial and SIWE. `npm run test:account` starts through the actual registration form and decodes the rendered QR. Reports contain no passwords, sessions or authenticator secrets. `tests/browser/registration.spec.ts` intercepts all network requests and covers validation, service failures, session-required navigation, phone layouts, axe and unavailable email recovery. Superseded OAuth fixtures were removed. These tests do not make real wallet transactions or prove a public deployment.
+After creating a current release package, `npm run test:e2e:offline` runs isolated registration, account, payment, native-game, NPC, forest-progression and wallet-refresh fixtures. Requests use local files or intercepted responses; tests do not operate the user's browser.
 
-**26 October paid NPC follow-up:** `npx playwright test tests/browser/paid-npc.spec.ts tests/browser/paid-entry.spec.ts tests/browser/npc-follow.spec.ts tests/browser/game-fullscreen.spec.ts --project=chromium` passes 18 isolated cases. The native export exercises all five paid outcomes, delayed effects, exact acknowledgements, duplicate replies, 210 seconds of simulated wallet waiting, rejected actions and unrelated heartbeat denial. The React fixture verifies continuing payment heartbeats and fullscreen; practice choreography still passes. Fifty-two focused rules/randomness/payment cases, types, focused lint/formatting, production build and export verification pass. Evidence: `test-results/paid-npc/`. This suite is included in `test:e2e:offline`; Firefox has not been claimed for this new run. The separately recorded real owner full-clear settlement verifies two returned GLOW plus two bonus GLOW; fixture NPC outcomes are not live NPC receipts.
+`npm run test:e2e` additionally needs the development app at `http://127.0.0.1:3000`. `TEST_BASE_URL` selects another test origin. The full development suite is not a production suite: developer controls and practice are absent from production.
 
-**26 October fullscreen entry/recovery:** `npx playwright test tests/browser/paid-entry.spec.ts tests/browser/game-fullscreen.spec.ts` passes six isolated Chromium cases. They cover account linking, rejected signatures, wallet/network readiness, mobile review errors, automatic same-receipt draw retries, fullscreen across registration, a subsequent shop request and native F4/automatic saved-class entry. The React fixture uses Strict Mode and the actual website styles; the native test uses the complete export. No real signature or payment is sent. Nineteen focused unit cases also cover retry bounds/abort, receipt recovery, randomness and sanitized typed API errors. Browser evidence: `test-results/entry-fullscreen/report/index.html`; earlier developer-review/Info evidence remains under `test-results/ui-entry-fix/`. These cases are included in `test:e2e:offline`. Firefox coverage of the new payment cases has not been claimed.
+Useful focused runs:
 
-**26 October game deployment:** 63 focused execution/receipt/preparation/verification cases pass, followed by 21 execution/preparation cases after correcting explicit wallet fee fields. All 31 Foundry cases pass. Four isolated Chromium/Firefox review cases pass with the real Wagmi provider and local RPC fixtures. They exercise disconnected-wallet denial, receipt recovery, downloads, 320/1440px layouts, keyboard interaction and light/dark axe scans. These tests are separate from the real canonical deployment and 100-GLOW funding receipts in `deployments/game-economy.json`.
+```powershell
+npx playwright test tests/browser/paid-entry.spec.ts tests/browser/paid-npc.spec.ts tests/browser/game-fullscreen.spec.ts --project=chromium
+npx playwright test tests/browser/game-progression.spec.ts tests/browser/npc-follow.spec.ts tests/browser/supply.spec.ts
+npx playwright test tests/browser/info.spec.ts
+```
 
-`node tests/hosted/auth-recovery.mjs` is an **online, staging-only mutation test**, not part of the offline suite. It creates/removes/restores only its own disposable identity. The 26 October run verifies exact four-table restoration, original password/TOTP login, AAL1 denial/AAL2 profile access, fixture cleanup and unchanged unrelated accounts. Evidence: `test-results/auth-recovery/hosted-3Ew6yB/result.json`. It retains the existing provider runtime/keys and does not establish later-game-action recovery. See [Setup](SETUP.md#hosted-auth-recovery-drill).
+Playwright clears its output directory. Use `test-results/browser` or another dedicated run directory, **never the shared test-results root**, which also holds recovery archives. HTML reports use `test-results/browser-report`. Traces/videos are disabled and automated audio is muted. Do not capture passwords, QR secrets or cookies.
 
-After the 25 October computer freeze, Vitest defaults to one worker; retain the single Playwright worker and avoid running a build, Lighthouse and browser tests at the same time. This also bounds the unit stage in `test:all`. It limits load; the Windows shutdown log did not establish the cause of the freeze. Keep each rerun under its own ignored `test-results/<run>` folder, never the shared root. The subsequent completion pass now has all 118 browser cases passing; the interrupted run remains historical evidence only. See [Review](REVIEW.md).
+## Hosted checks
 
-The isolated signer has a separate static check, `npm run typecheck:signer`. Run its Node cases with `npm test -- tests/server/signer-service.test.ts tests/server/signer-runtime.test.ts --maxWorkers=1`. Its native Deno HTTP checks use an ephemeral unfunded fixture key and loopback only:
+These commands contact services and create disposable accounts. They need private configuration and an approved fixture policy. They remove only their own fixtures; existing accounts and authenticators must remain unchanged.
+
+| Command                                        | Scope                                                                        |
+| ---------------------------------------------- | ---------------------------------------------------------------------------- |
+| `node tests/hosted/registration.mjs --staging` | Staging signup, duplicate protection, TOTP and existing-account preservation |
+| `node tests/hosted/registration.mjs`           | Registration checks against the working service                              |
+| `npm run test:hosted`                          | Two ordinary accounts, RLS, TOTP, SIWE and developer denial                  |
+| `npm run test:account`                         | Actual registration form, QR enrollment and account/password/logout UI       |
+| `npm run test:staging-config`                  | Staging password boundary and redirects                                      |
+| `node tests/hosted/auth-recovery.mjs`          | Staging fixture restore with the original password and TOTP                  |
+| `node tests/hosted/game-recovery.mjs`          | Staging journal outage, retry and later-action restore                       |
+| `node tests/hosted/vercel.mjs`                 | Protected cloud account/API checks                                           |
+| `node tests/hosted/vercel-browser.mjs`         | Protected cloud QR/TOTP and responsive UI                                    |
+| `npm run test:production`                      | Built app on temporary port 3001, account tests, guards and Lighthouse       |
+
+Cloud review tests need the authorized Vercel CLI and private automation credential, sent only to the exact review origin. Entry-review fixtures use an unfunded wallet: a prepared payment plan is not a real payment.
+
+`npm run test:all -- --glow-review` includes hosted mutations. It needs the development app on port 3000 and free port 3001. It rebuilds rules/presentation and syncs the export, but does not regenerate maps. Read [Setup](SETUP.md) before using recovery or migration tools.
+
+The native signer runtime has a separate local check:
 
 ```powershell
 $env:DENO_DIR = Join-Path $PWD '.tools/deno/cache'
 & '.tools/deno/node_modules/deno/deno.exe' test --allow-net=127.0.0.1 --config supabase/functions/settlement-signer/deno.json tests/server/signer.deno.ts
 ```
 
-These tests do not provision the real signer, deploy an Edge Function or enable paid play.
+It uses ephemeral unfunded keys and loopback HTTP, without provisioning the real signer.
 
-`npm test -- tests/deployment/signer-custody.test.ts` covers encrypted signer recovery, recovered-address proof, changed identity/project/purpose, owner-role rejection and authenticated ciphertext/key tampering. These keys are ephemeral test keys. `node scripts/signer-custody.mjs --verify` is a separate real provider read-back of the existing restricted key; its public evidence does not prove function provisioning or a paid outage drill.
+## Release verification
 
-For the paused game-contract tooling, run `npm test -- tests/deployment/game-plan.test.ts tests/deployment/game-verification.test.ts tests/deployment/plan.test.ts tests/server/game-deployment-route.test.ts tests/server/developer-access.test.ts`. These 62 focused cases cover both plan types, authorization boundaries, exact receipts/mint events, runtime and role mismatches, confirmations, reorgs, existing funds and stale reviews. All chain data in these tests is synthetic. `npx playwright test tests/browser/game-deployment.spec.ts --reporter=list` runs four isolated Chromium/Firefox cases with local files and intercepted requests only; it checks disabled transactions, downloads, failure/stale-result handling, keyboard controls, 320/1440px widths and light/dark axe scans. It does not open the user's browser or contact Supabase/Sepolia. The first sandboxed run was blocked by Windows browser/download permissions; the same four fixtures pass with normal headless process permissions.
+Recorded for the **27 October 2026 public release** at [lantern-vale.vercel.app](https://lantern-vale.vercel.app). Results describe executed checks, not guarantees about every device or future change.
 
-The 25 October service changes have focused checks in `tests/deployment/backup-envelope.test.ts`, `tests/deployment/retained-backup.test.ts` and `tests/server/database-promotion.test.ts`. They cover encryption/tamper rejection, independently authenticated cloud manifests, pinned object identities, transactional migration/history registration, preserved Auth rows and rollback on drift. Package checks reject the encrypted backup format and literal recovery keys. Run these with `--maxWorkers=1` before using the recovery tools. Real cloud retrieval/native restore and hosted Auth checks are separate evidence in [Review](REVIEW.md).
+| Check                              | Result                | Scope                                                                                                                        |
+| ---------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Types, lint, formatting and build  | PASS                  | Local checks and completed Vercel build                                                                                      |
+| Unit/local integration             | PASS                  | 315 cases in the full run; the four-case native backup rerun completed the two sandbox-blocked cases, covering all 317 cases |
+| Contracts                          | PASS                  | 31 Foundry cases, including cap/mint/self-burn/transfers, faucet and settlement; two burn checks also rerun separately       |
+| Game export                        | PASS                  | 220 files match the manifest; unchanged cave and fresh packaged native-game loading                                          |
+| Public account journey             | PASS                  | Fresh registration, QR/TOTP, SIWE, entry review and recovery without developer membership or Vercel bypass                   |
+| Access isolation                   | PASS                  | Two-account RLS; denial of guests, removed factors and cross-origin mutations; production developer routes return 404        |
+| Public UI                          | PASS for tested scope | Desktop/390px account layouts, targeted axe checks and Info-page browser tests                                               |
+| Contract verification              | PASS                  | Exact Etherscan and Sourcify matches for all three contracts; [records](../deployments/etherscan.json)                       |
+| Real GLOW victory                  | PASS                  | Two deposited GLOW returned plus two bonus GLOW; both NPCs also passed the owner's playtest                                  |
+| Real GLOW defeat                   | PASS                  | No refund/bonus; one deposited GLOW recycled to the faucet                                                                   |
+| Recovery                           | PASS for tested scope | Encrypted checkpoint retrieval, native restore, hosted password/TOTP restore and later-action journal replay                 |
+| Development dependency audit       | OPEN finding          | Earlier braces advisory in the ESLint tooling chain, described below                                                         |
+| Friends' full live-wallet journeys | USER TESTING          | Separate-wallet claims, transfers and complete rounds                                                                        |
+| Manual accessibility and devices   | NOT YET VERIFIED      | NVDA, Firefox Accessibility Inspector and physical phone/mobile wallets                                                      |
 
-| Command                                                                                                                          | Coverage / prerequisites                                                                                          |
-| -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `npm test`                                                                                                                       | All TypeScript unit and local integration tests; no hosted service                                                |
-| `npm test -- tests/game`                                                                                                         | Rules, practice saves, map integrity and effect resources                                                         |
-| `npm test -- tests/server`                                                                                                       | Request/auth/receipt and database tests                                                                           |
-| `npm test -- tests/wallet`                                                                                                       | Address/amount, journal and token accounting                                                                      |
-| `npm run contracts:test`                                                                                                         | All local Foundry suites, including fuzz tests                                                                    |
-| `npm run contracts:test -- --match-test testReturnsAllEightTokensPlusBonusAndNoMint`                                             | One Solidity test                                                                                                 |
-| `npm run contracts:coverage`                                                                                                     | Instrumented contract coverage; inspect warnings                                                                  |
-| `npm run typecheck` / `npm run lint` / `npm run format:check`                                                                    | Static checks                                                                                                     |
-| `npm run game:verify`                                                                                                            | Export hashes and required resources                                                                              |
-| `npm run test:e2e`                                                                                                               | Chromium and Firefox against a running local development app                                                      |
-| `npm run test:e2e -- tests/browser/game-polish.spec.ts --project=chromium`                                                       | Selected browser suite                                                                                            |
-| `npm run test:e2e -- tests/browser/game-navigation.spec.ts --project=firefox`                                                    | Delayed sprite loading, Forest I exit lanes, native traversal through both forests and map captures               |
-| `npm test -- tests/server/settlement.test.ts tests/server/settlement-database.test.ts`                                           | RPC-fixture receipts, result derivation and candidate migrations 003–005 in local Postgres                        |
-| `npm test -- tests/wallet/game-payments.test.ts tests/server/payment-recovery.test.ts`                                           | Exact approvals, stale deadlines, lost hashes, failed registration, unpaid expiry and no duplicate charge         |
-| `npm test -- tests/server/randomness.test.ts`                                                                                    | Real historical quicknet BLS proof, future draw timing, tamper rejection and persisted-outcome reconciliation     |
-| `npm test -- tests/server/settlement-signer.test.ts tests/server/issue-settlement.test.ts tests/wallet/settlement-claim.test.ts` | Restricted adapter, cached result retries, signer rotation, expiry and browser claim checks                       |
-| `npm run test:e2e -- tests/browser/bridge.spec.ts tests/browser/game-navigation.spec.ts tests/browser/demo.spec.ts`              | Isolated muted native class selection, bridge timing, release guards, NPC choreography and forest traversal       |
-| `npm run test:hosted`                                                                                                            | Real Supabase isolation/TOTP/SIWE using disposable fixture accounts                                               |
-| `npm run test:account`                                                                                                           | QR enrollment, account UI/password/logout regression                                                              |
-| `npm run test:production`                                                                                                        | Built app on temporary port 3001, release guards, account tests and Lighthouse                                    |
-| `npm run test:all`                                                                                                               | Static checks, unit/integration, contracts, export, build, browsers, hosted checks and production checks in order |
+Live receipts: [full-clear victory](https://sepolia.etherscan.io/tx/0x021daa3a821d4edff87e7bc5088d474473311cd74185dba60e4170bd42064780), [combat defeat](https://sepolia.etherscan.io/tx/0xd85b87d1432d08080601c9b64e57aeb6f88946ddfb4025b18516f76b4fdefaf3). Deployment/funding records remain in `deployments/`; historical receipts are not current balances.
 
-The complete suite needs the configured development server on port 3000, free port 3001, network access, the existing licensed game resources and the ignored Supabase test credentials. It rebuilds rules/presentation and synchronizes the export before browser tests; it does not regenerate maps. Do not run it against a production user database without an approved disposable-account policy. It creates only uniquely named test users and deletes those fixtures in `finally`; it does not remove existing accounts or alter the user's authenticator.
+Private reports remain under ignored `test-results/hosting/`: `public-release.json`, `public-hosted-accounts.json`, `public-browser-accounts.json`, `live-defeat.json`, `all-player-unit.json` and `all-player-native-backup.json`. NPC and source-audit reports have separate directories. Historical implementation notes remain recoverable in Git history.
 
-Playwright clears its output directory at startup. Its default is now explicitly `test-results/browser`, separate from `test-results/hosted-backup`, `release`, map recovery and other retained reports. Never override output to the shared `test-results` root. `tests/deployment/browser-output.test.ts` guards against that overlap. The earlier root configuration removed older local artifacts during the 25 October demo tests; a fresh encrypted hosted capture and local restore replaced the backup, as recorded in [Review](REVIEW.md).
+The earlier audit found [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) in the development ESLint/fast-glob/micromatch chain; the runtime-only audit found no known vulnerabilities. No incompatible forced downgrade was applied. Audit results are time-sensitive: rerun `npm audit` and `npm audit --omit=dev` before a dependency update or release and assess the result.
 
-`npx playwright test tests/browser/game-progression.spec.ts tests/browser/npc-follow.spec.ts tests/browser/supply.spec.ts` runs entirely against local fixtures in muted browsers. It covers actual keyboard finishing turns, all five forest fights and traversal, flower-path bypass, progressive lighting, continuous collision-respecting NPC movement and blackout timing. Wallet components use the actual query cache and transaction hook with a controlled RPC/wallet boundary; confirmed, pending, rejected, reverted and account-switch scenarios cannot substitute for a real MetaMask receipt. No hosted account, wallet signature or user browser is used. Firefox and the production build may need normal Windows process/filesystem access when the sandbox prevents startup.
+Keyboard, HTML validation, axe, viewport tests and Lighthouse are distinct checks. None proves full WCAG conformance, canvas screen-reader support, photosensitivity safety or a professional security audit. Live daily-bonus boundaries, prolonged outages, signer rotation and total provider/root-key loss remain outside the recorded acceptance scope. See [Security](SECURITY.md).
 
-Install browsers once:
+## Source publication
 
-```powershell
-$env:PLAYWRIGHT_BROWSERS_PATH="$PWD/.tools/browsers"
-npx playwright install chromium firefox
-```
+Run `node scripts/review-source.mjs` before staging, then `node scripts/review-source.mjs --index` to audit staged bytes. They write an ignored hash manifest and path list without uploading files. Targeted credential checks do not detect every possible secret format.
 
-Browser traces and videos are off to avoid retaining session cookies. Automated audio is muted. Test screenshots and runner reports are generated under ignored `test-results/`; no credentials or QR enrollment secrets should be captured. Set `TEST_BASE_URL` to use another test origin. Production disables developer practice routes, so the full development suite is not a production suite.
-
-## What the tests establish
-
-### Hosted staging SQL rehearsal
-
-`npm run test:staging-config` separately verifies real Auth configuration using the ignored staging environment; it rejects any other project/origin. One disposable confirmed account checks the exact callback, fallback for an unlisted external redirect, rejection of an 11-character password, acceptance of a 12-character password and sign-in with that updated password. Cleanup removes only its own fixture. All six checks passed on 24 October. No email is sent, no authentication link/credential is logged, and no existing account is changed. The report is `test-results/online/staging/auth-configuration.json`. This does not establish inbox delivery or an application callback browser journey.
-
-`tests/hosted/staging.sql` must run as one complete SQL Editor request against an approved **empty staging database** with migrations 001–006. Its guard refuses existing accounts or app records. On 24 October it passed against Lantern Vale Staging's PostgreSQL 17.11: actual RLS/AAL policies and role grants, account isolation, entry/action/purchase retries, stale/cross-account rejection, pending-review locks, exact export values, cancellable deletion requests and default dry-run maintenance. All fixture writes were rolled back and zero remaining rows were verified. Independently checked permissions cover all thirteen tables and fourteen privileged functions. This is hosted SQL evidence with injected claims and synthetic payment values, not real Auth issuance, chain receipts, deployment or recovery evidence.
-
-Set `TEST_ACCOUNT_DATA=true` only when running `tests/hosted/auth.mjs` against an isolated app configured for staging with migration 006. This extends the existing disposable-account suite with private export headers/ownership, AAL1/guest denial, strict request input, idempotency, cancellation, preserved profile/contacts and direct-RPC denial. It must not be enabled against the existing app service while 006 is absent. Neither script changes the configured developer owner.
-
-### Fully local follow-up checks
-
-- `npm test -- tests/deployment/game-plan.test.ts tests/game/licenses.test.ts`: validates the unsigned economy constructor/role/reserve review, rejects mismatched chains/roles and imprecise amounts, and verifies that both source and export retain the complete generated runtime notices. No signer is provisioned, deployment sent or real bonus reserve selected.
-- `npm run database:rehearse`: twelve checks upgrade populated 001/002 PostgreSQL fixtures to 006, preserve all original app/Auth fixture rows and exact large numerics, keep old rounds marked `legacy`, reject used payments and enforce RLS/MFA after the upgrade. Executes rollback-only SQL, injects data loss, and rejects schema/policy/column-grant/role drift, removed NOT NULL, altered RLS helpers/event triggers, unexpected grant delegation, partial/repeated upgrades and changed applied migration sources. `npm run database:review` generates review SQL without contacting a service. Reports are under `test-results/database-upgrade/`. Auth is a local stand-in. See [Setup](SETUP.md#existing-database-upgrade-rehearsal).
-- `npm run database:backup-test`: four checks cover fixed endpoint/TLS options, secret-safe errors/output bounds, native pg_dump/DPAPI read-back and tampering, and a fresh native restore with matching data/schema and anonymous denial. Native cases require the reviewed Windows PostgreSQL tools and otherwise skip; localhost socket access may need a normal-access run. They use synthetic records only. `database:backup` and `database:restore-rehearse -- <capture-directory>` separately exercise the real read-only hosted source and a private local clone. They never submit a hosted migration. Their actual evidence and recovery limits are in [Setup](SETUP.md#encrypted-hosted-backup-and-local-restore).
-- `npm test -- tests/server/account-data.test.ts`: actual handlers and migrations verify session-bound export/request ownership, exact token strings, confirmation/Origin/rate-limit enforcement, SQL privilege denial, explicit export limits and migration-unavailable behavior. Deletion requests retain accounts/payments and remain review-required after terminal game states. Dry-run/bounded cleanup preserves protected table contents and current challenges/rate limits. Auth transport is mocked; the existing auth suite separately exercises `requireUser`.
-- `npm run test:e2e -- tests/browser/account-privacy.spec.ts --reporter=list`: two isolated Chromium/Firefox cases intercept every request locally. Covers private download contents, export errors, typed confirmation, cancellation, persistence/focus, migration-unavailable controls, 320/1440px layouts and light/dark axe checks. No app server, hosted account or user's browser is involved.
-- `npm run recovery:drill`: ten local cases across recovery and paid-journey tests. Physical PGlite snapshots preserve exact amounts, reviews, actions, tombstones, signed results and security definitions; original instances are closed before journey restores. Covers stale expected checkpoints, corrupt/missing archives, source/inventory mismatches, capture-time writes, invalid destinations, synthetic-Auth restrictions, rollback, RLS/MFA and privileged-RPC denial after restore. `test-results/recovery/report.json` records the latest focused result; immutable snapshot/manifest directories contain synthetic records only. The expected manifest digest is held separately in test memory. This is an exact-checkpoint rehearsal, not a durable backup service or proof of hosted Auth/PITR/signer recovery. See [Setup](SETUP.md#recovery-rehearsal-and-operating-procedure).
-- `npm test -- tests/server/paid-journey.test.ts`: three complete persisted journeys through actual entry/action/reload/claim handlers and migrations 001–006. Includes missing beacon availability, lost response after a committed purchase, database destruction/restore at three interruption points, retries without a second payment, other-account denial, stale/forged input, signer outage/cache recovery, deposit mismatch and settled-result rejection. Auth, chain RPC and signer transport are isolated fixtures; actual contract settlement balances are covered separately by Foundry.
-- `npm run game:balance`: 11,232 rule simulations. All 324 encounter combinations cross six classes, starting/stocked inventories and boss-only/full-clear routes. Each NPC outcome and a cured curse also cross eight forest draws and all three bosses. Reports under `test-results/balance/` disclose the tactical policy and its limits. These are not human win probabilities or an anti-bot assessment.
-- `npm run release:package -- --glow-review`, then `npm run test:e2e -- tests/browser/companion.spec.ts tests/browser/package.spec.ts --reporter=list`: eight isolated Chromium/Firefox cases. All requests are fulfilled from local files; no app server, Supabase login, user browser or wallet is used. Covers keyboard focus, unavailable resources, concise live status, skip target, widths 320/1440, light/dark axe scans, packaged MZ loading and closed release guards.
-- `npm test -- tests/deployment/package.test.ts`: missing/changed/unlisted files, forbidden paths, backup/archive extensions, renamed PostgreSQL dumps, credential-bearing SQL/configuration and unchanged migration compatibility. The native backup suite additionally checks that actual pg_dump output and DPAPI-encrypted bytes remain forbidden when renamed as an image. These checks cover selected formats, not every possible secret encoding. Package verification is required before installing dependencies or building inside an extracted copy, because those operations add files outside its immutable manifest.
-
-`test:all` creates the review package before browser tests. If running the entire browser suite directly, run `release:package` first. Package reproducibility means identical file hashes and ZIP bytes for unchanged inputs on the same Windows/.NET toolchain; it does not mean the Node dependency installer or external services are bundled.
-
-### Vercel preparation
-
-`npm test -- tests/deployment/package.test.ts tests/deployment/hosting.test.ts` checks package privacy/integrity and the hosted-game build prerequisite. The latter remains usable after dependency installation and rejects missing/changed assets and enabled local practice. GLOW builds additionally require the explicit protected working-service review flags and matching manifest; package generation never publishes a deployment. In a fresh verified release copy, run `node scripts/verify-hosted-game.mjs` before building. Do not run a cloud deployment from the authoring checkout.
-
-The initial 25 October preparation passed six focused checks, types/lint/format, the 220-file game check, a Linux dependency dry run and an isolated Windows build. The later actual cloud build failed because installation from `apps/web` omitted root build dependencies. The corrected command is `npm ci --include=dev --include-workspace-root`. A fresh isolated install with that exact command and the full Windows build pass. Seven focused checks now include refusal of an unexpected production Vercel target. The existing upstream Viem/Ox dynamic-import warning remains. No successful cloud build, public Auth callback or public game journey is claimed. Publication is deferred by the user; see [current hosting evidence](REVIEW.md#vercel-configuration-and-publication-deferred--25-october-2026) and ignored `test-results/hosting/`.
-
-### Other test boundaries
-
-- Unit tests cover deterministic progression, six classes/seeded runs, practice accounting, save validation, matching maps/collision, balances and input validation.
-- PGlite runs the actual SQL migrations to exercise RLS, ownership, privileged function denial, payment tombstones, action concurrency and replay. Hosted tests separately exercise real Supabase sessions, MFA and SIWE with an unfunded in-memory test key.
-- Settlement tests reject wrong chain, payer, contract, class, payment ID, calldata, transfer, item, round, canonical block and confirmation count. SQL checks cover review locks, retries, purchase/action atomicity, deposit gaps, terminal freezes, restricted result storage and deletion tombstones. Payment tests cover interrupted submissions, lost hashes and unpaid expiry without a second charge. Signature tests cover exact results, cached retries, expiry and rotation. These tests do not deploy the candidate, provision a signer, apply hosted migrations 003–005 or establish real paid-game receipts.
-- Randomness tests use quicknet's actual public round-1 signature and the pinned official trust root, not a fabricated signing key. They verify BLS tamper rejection, fixed future-round timing, deterministic encounter derivation, proof/state reconciliation and unavailable-relay recovery. The fixture is a historical proof, not a live paid-round availability or fairness audit.
-- Foundry covers token ownership/cap/burn/transfers, allowance/balance failures, faucet timing/funding, paid entry, signer/domain/expiry/recipient checks, replay and settlement reserves/bonuses.
-- Browsers cover real MZ loading, menus, movement, NPC choreography, combat effects, victory/defeat paths and the parent-message boundary. Paid-message fixtures are not onchain proof.
-- Developer-access tests reject guests and a separate verified fixture account across `/dev/*`, including HTML and RSC requests. Ordinary authenticated practice remains available without developer controls. Never substitute a fixture ID for the configured owner; actual owner access is verified separately in the user's browser.
-- Browser suites include rendered HTML validation, axe, keyboard navigation, themes, storage failures and widths from 320 to 1440px. Lighthouse measures a production homepage, mobile and desktop.
-
-## Checks requiring real people or external state
-
-The user's MetaMask connection/signature, actual Sepolia token/faucet/transfer/entry/settlement receipts, source verification and fresh nonowner public journey are separate release gates. Deployment, funding, the owner's first faucet claim/cooldown and exact Sourcify source matches have recorded evidence under `deployments/`; separate-wallet transfer and paid-game verification remain outstanding. Real inbox delivery, lost-factor recovery, NVDA, Firefox Accessibility Inspector, physical phones/mobile wallets and a full canvas accessibility/photosensitivity review are not replaced by fixture automation or a Lighthouse score.
-
-Current executed results, baseline comparison and known failures are in [Review](REVIEW.md). [Project summary](../PROJECT_SUMMARY.md) records integration checkpoint status.
-
-## Disabled signer provisioning — 26 October 2026
-
-The focused signer/runtime/custody suite passes 28 cases, and the native Deno suite passes two cases. Signer types, focused lint and formatting pass. Five live Supabase probes verify anonymous/wrong/publishable credential denial, browser-origin rejection and the authorized disabled response; all return no signature. Five downloaded function source files match local bytes. Evidence: `deployments/signer-provisioning.json`, `deployments/supabase-signer.json` and `test-results/signer-provisioning/`. These checks do not establish real GLOW settlement or full operational recovery.
+Keep environments, private tooling, recovery archives, reports, licensed raw resources and the compiled launcher out of Git. [Assets](ASSETS.md) explains public authoring source versus the finished deployment artifact.

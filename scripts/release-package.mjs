@@ -71,7 +71,6 @@ for (const path of [
   "supabase/config.toml",
   "deployments",
   "docs",
-  "PROJECT_SUMMARY.md",
   "scripts/verify-package.mjs",
   "scripts/verify-hosted-game.mjs",
 ])

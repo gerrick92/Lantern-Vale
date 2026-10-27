@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import { resolve } from "node:path";
 
 const config: NextConfig = {
+  agentRules: false,
   outputFileTracingRoot: resolve(__dirname, "../.."),
   poweredByHeader: false,
   devIndicators: false,

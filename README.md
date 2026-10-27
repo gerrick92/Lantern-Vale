@@ -2,9 +2,11 @@
 
 Lantern Vale is a turn-based fantasy RPG built in RPG Maker MZ, with a web app for accounts, wallets and **GLOW**, its ERC-20 token on Ethereum Sepolia. Choose a class, prepare at the inn and find the guardian that has stolen the valley’s dawn.
 
+**[Play Lantern Vale](https://lantern-vale.vercel.app)** · [Roadmap](docs/ROADMAP.md)
+
 [The game](#the-game) · [How to play](#how-to-play) · [GLOW](#glow) · [Tech stack](#tech-stack) · [Installation](#installation) · [Running locally](#running-locally) · [Testing](#testing) · [Contracts](#contracts) · [Project guide](#project-guide)
 
-**[Play Lantern Vale](https://lantern-vale.vercel.app)** — a free Sepolia demo. Every registered player can use the real GLOW game after authenticator setup and wallet linking. Entry, purchases, victory payouts and defeat recycling are verified on Sepolia. [Current checkpoint](PROJECT_SUMMARY.md) · [Roadmap](docs/ROADMAP.md)
+Free to try with Sepolia test tokens. Every registered player can claim GLOW and play after setting up an authenticator and linking a wallet. No developer account or invitation is required.
 
 ## The game
 
@@ -24,6 +26,8 @@ The website includes profiles, Google Authenticator-compatible TOTP, signed wall
 4. Open Play, choose **Start game**, select a class and confirm its one-GLOW entry in MetaMask.
 5. Prepare at the inn, explore the forest and defeat the guardian. Attacks, skills, spells, items and defending each consume a combat turn.
 6. On victory, confirm settlement to receive all GLOW used in that round plus the eligible bonus. A loss forfeits only those used tokens.
+
+Keep your password and authenticator safe. This demo does not verify inbox ownership or provide email password resets. Signed-in players can change their password in Settings.
 
 MetaMask may request an allowance approval followed by the payment itself. Approval does not transfer GLOW. Entry and optional encounters also wait for a verified random draw, normally available about a minute after payment. Leave the game open while it finishes. If interrupted, resume the saved adventure/payment rather than paying again.
 
@@ -55,7 +59,7 @@ GLOW is a Sepolia test token with no USD peg, cash redemption or promised moneta
 
 Winning returns your deposits even at the bonus limit. There is no fixed spending or play-count cap. Faucet claims transfer existing tokens, not newly minted ones.
 
-GLOW uses 18 decimals and caps outstanding supply at **1,000,000**. The owner can mint within the cap; holders can burn their own tokens, reopening mint capacity. The game keeps player deposits separate from its bonus reserve.
+GLOW uses 18 decimals and caps outstanding supply at **1,000,000**. The owner can mint within the cap; holders can call the token contract's `burn(amount)` function to destroy their own tokens, reopening mint capacity. There is no burn button in the app. The game keeps player deposits separate from its bonus reserve; losing a round recycles deposits rather than burning them.
 
 ## Tech stack
 
@@ -70,17 +74,17 @@ GLOW uses 18 decimals and caps outstanding supply at **1,000,000**. The owner ca
 | Tests                     | Vitest, Playwright, local Postgres/PGlite, Foundry, axe               |
 | Hosting                   | Vercel for the app; Supabase for accounts and data                    |
 
-This testnet demo does not verify ownership of entered email addresses. Save your password and authenticator: email password reset is unavailable. A signed-in player can change their password in Settings. New accounts receive no developer privileges.
-
 The server validates payments and progression. Browser state, practice saves and client victory messages cannot authorize rewards. [Architecture](docs/ARCHITECTURE.md) · [Security](docs/SECURITY.md)
 
 ## Installation
 
 You need **Node.js 24 LTS and npm 11**, configured Supabase services and the complete licensed game export. Windows can build the launcher using the installed .NET Framework compiler. Foundry and Playwright browsers are required for their tests, not to start the app.
 
-From the project root:
+Clone the repository, then install dependencies from its root:
 
 ```powershell
+git clone https://github.com/gerrick92/Lantern-Vale.git
+cd Lantern-Vale
 npm ci
 
 # First setup only. Preserve an existing configured environment.
@@ -89,9 +93,7 @@ if (-not (Test-Path -LiteralPath apps/web/.env.local)) {
 }
 ```
 
-Source: [gerrick92/Lantern-Vale](https://github.com/gerrick92/Lantern-Vale). A fresh clone contains the authored game data and plugins. The licensed finished-game export is supplied separately for deployment; the repository is not a standalone RPG Maker asset download.
-
-Configure `apps/web/.env.local` using [Setup](docs/SETUP.md). Privileged credentials stay server-only. Never put secrets in Git or chat. Existing accounts, contracts and authenticator factors do not need to be recreated.
+Configure `apps/web/.env.local` using [Setup](docs/SETUP.md). Privileged credentials stay server-only and outside Git. Existing accounts, contracts and authenticator factors do not need to be recreated.
 
 A source checkout omits RPG Maker’s licensed runtime assets. Restore the approved finished export or follow [the game build instructions](docs/GAME.md#authoring-and-export) using a licensed MZ installation. Players need neither RPG Maker nor Steam. Full map rebuilds overwrite authored data; preserve editor changes first.
 
@@ -134,9 +136,9 @@ npm run game:verify
 npm run test:offline -- --glow-review
 ```
 
-The offline workflow runs sequentially and needs its tools installed already. It does not sign MetaMask transactions or change hosted accounts. `npm run test:all` also includes disposable hosted-account checks; read [Testing](docs/TESTING.md) first. Reports belong in `test-results/`.
+The offline workflow runs sequentially and needs its tools installed already. It does not sign MetaMask transactions or change hosted accounts. `npm run test:all -- --glow-review` also includes disposable hosted-account checks; read [Testing](docs/TESTING.md) first. Reports belong in ignored `test-results/`.
 
-[Recorded results](docs/REVIEW.md) distinguish local tests, actual receipts and human testing. Automated accessibility checks do not establish full WCAG conformance.
+[Recorded results](docs/TESTING.md#release-verification) distinguish local tests, live receipts and remaining manual checks. Automated accessibility checks do not establish full WCAG conformance.
 
 ## Contracts
 
@@ -167,4 +169,13 @@ docs/           Setup, architecture, game, assets and release guides
 
 `mosslight` and `SLMS` remain in internal paths and protocol identifiers for compatibility. The product is Lantern Vale and the token is GLOW.
 
-Preserve applied migrations, payment journals, deployment records and recovery material. A verified release package must include the finished game; a source-only GitHub upload cannot run it. [Asset provenance and licenses](docs/ASSETS.md) · [Original assignment](docs/ORIGINAL_SOFTSTACK_ASSIGNMENT.md)
+| Guide                                | Contents                                                |
+| ------------------------------------ | ------------------------------------------------------- |
+| [Setup](docs/SETUP.md)               | Environment, services, hosting and recovery procedures  |
+| [Game](docs/GAME.md)                 | Rules, controls, authoring and export                   |
+| [Architecture](docs/ARCHITECTURE.md) | Application structure, APIs and trust boundaries        |
+| [Security](docs/SECURITY.md)         | Authentication, payments, signing and known limits      |
+| [Testing](docs/TESTING.md)           | Commands, verified results and manual checks            |
+| [Assets](docs/ASSETS.md)             | Artwork provenance and third-party license requirements |
+
+Preserve applied migrations, payment journals, deployment records and recovery material. A verified deployment package must include the finished game; a source-only GitHub deployment is insufficient. RPG Maker resources may only be distributed under their applicable terms. The [original Softstack assignment](docs/ORIGINAL_SOFTSTACK_ASSIGNMENT.md) is retained as the project brief.

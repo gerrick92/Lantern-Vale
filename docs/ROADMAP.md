@@ -25,4 +25,4 @@ Share the public link, record friends' feedback and fix any reproduced issues. F
 
 Community proposals/voting, extra quests and balance improvements remain planned. No voting rights are attached to GLOW today. New features need their own implementation and tests.
 
-[Current checkpoint](../PROJECT_SUMMARY.md) · [Recorded tests](REVIEW.md) · [Original assignment](ORIGINAL_SOFTSTACK_ASSIGNMENT.md)
+[README](../README.md) · [Recorded tests](TESTING.md#release-verification) · [Original assignment](ORIGINAL_SOFTSTACK_ASSIGNMENT.md)
