@@ -1,0 +1,38 @@
+{
+  "format": 1,
+  "note": "Exact migration sources applied to both Staging and Sepolia through 008 on 2026-10-26; transactional preservation checks passed. Add new migrations; never rewrite these sources.",
+  "migrations": [
+    {
+      "file": "202610190001_core.sql",
+      "sha256": "865fee7b2f5e6caf89c4c560a33ab1fb1dc66bc4fbe7315ace9ca8eba1977750"
+    },
+    {
+      "file": "202610190002_payment_receipts.sql",
+      "sha256": "03f346b017e7d416ec42a9a077eaccf22b84f94f716f69b3ad8327dfb96c3505"
+    },
+    {
+      "file": "202610220003_settlement_payments.sql",
+      "sha256": "892b9cec082d1e937a8aa493e86d38997ac9dab1a8abad419422db7365b110b4"
+    },
+    {
+      "file": "202610230004_payment_reviews.sql",
+      "sha256": "bb2eddddb7a38f4214584f0ce8257ad7ba2236a38b471dd2fa0edfa9f07a9139"
+    },
+    {
+      "file": "202610230005_settlement_results.sql",
+      "sha256": "c35e176303960392b5cc4896b20a5f7c53d48144908f3588f632f24d2249148d"
+    },
+    {
+      "file": "202610240006_account_data.sql",
+      "sha256": "bb882f6b5d6553cd02ac3d648322617a7ee1a6444cba8d1f79d9253e7688190e"
+    },
+    {
+      "file": "202610260007_game_recovery.sql",
+      "sha256": "377634b0ec96ff97a472c97db10f363bc87f352c76c9d1096b6401f7d10c09f5"
+    },
+    {
+      "file": "202610260008_recovery_deleted_owner.sql",
+      "sha256": "bda827bd8a2ed222fffa9852af35dfaa36fdc30a54cf5723b9b37c1745d226d2"
+    }
+  ]
+}

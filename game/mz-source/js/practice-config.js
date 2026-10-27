@@ -1,0 +1,1 @@
+window.MOSSLIGHT_PRACTICE_ENABLED = true;

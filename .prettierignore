@@ -1,0 +1,19 @@
+.tools/
+node_modules/
+.next/
+apps/web/next-env.d.ts
+apps/web/public/
+game/mz-source/
+game/export-manifest.json
+contracts/out/
+contracts/cache/
+contracts/broadcast/
+contracts/lib/
+package-lock.json
+test-results/
+playwright-report/
+coverage/
+/Lantern Vale.exe
+.env*
+# The original assignment is retained verbatim.
+docs/ORIGINAL_SOFTSTACK_ASSIGNMENT.md

@@ -1,0 +1,393 @@
+/* The website uses one JRPG palette and frame treatment across every route. */
+.rpg-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  filter: drop-shadow(0 1px 0 #111a2b80);
+}
+.ornament {
+  display: block;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.site-shell {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+}
+.site-header {
+  color: #f5e7c6;
+  background: linear-gradient(180deg, #25354c, #142135);
+  border-top: 3px solid #b3955f;
+  border-bottom: 1px solid #b3955f;
+  box-shadow: 0 3px 12px #080e1a30;
+  z-index: 2;
+}
+.header-inner {
+  width: min(1320px, calc(100% - 64px));
+  min-height: 80px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font:
+    600 1.25rem var(--font-display),
+    Georgia,
+    serif;
+  letter-spacing: 0.035em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand .rpg-icon {
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0 0 7px #e7b96140);
+}
+.site-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+}
+.site-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 50px;
+  position: relative;
+  font-size: 0.88rem;
+  text-decoration: none;
+  color: #d2d7df;
+}
+.site-nav .rpg-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.18s ease;
+}
+.site-nav a:hover .rpg-icon {
+  transform: translateY(-3px) rotate(-7deg);
+}
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 25px;
+  right: 0;
+  height: 2px;
+  background: #e9c87f;
+  transform: scaleX(0);
+  transition: transform 0.18s ease;
+}
+.site-nav a:hover::after,
+.site-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+.site-nav a[aria-current="page"] {
+  color: #fff0c6;
+}
+.account-link {
+  display: inline-flex;
+  gap: 0.6rem;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #9a845e;
+  box-shadow: inset 0 0 0 2px #142135;
+  background: #23334a;
+  color: #f8e8c1;
+  font-size: 0.85rem;
+  text-decoration: none;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.account-link:hover {
+  background: #344761;
+}
+.site-header :focus-visible {
+  outline-color: #fff0b6;
+}
+.site-main {
+  width: min(1120px, calc(100% - 80px));
+  margin: 0 auto;
+  padding: 3.5rem 0 4rem;
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+.is-interior::before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  inset: 84px 0 auto;
+  height: 320px;
+  background: url("/art/lantern-vale-forest-v2.webp") center 40% / cover;
+  opacity: 0.12;
+  mask-image: linear-gradient(#000, transparent);
+  pointer-events: none;
+}
+.site-main > h1,
+.information-page > h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(0.5rem, 2vw, 1.2rem);
+}
+.site-main > h1::before,
+.site-main > h1::after,
+.information-page > h1::before,
+.information-page > h1::after {
+  content: "";
+  display: block;
+  flex: 1 1 150px;
+  min-width: 8px;
+  max-width: 150px;
+  height: 8px;
+  border-top: 1px solid var(--gold);
+  border-bottom: 1px solid var(--border);
+  margin-top: 0.35rem;
+}
+.site-footer {
+  width: min(1280px, calc(100% - 64px));
+  margin: auto;
+  padding: 1.2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+.site-main.home-main {
+  width: 100%;
+  padding: 0;
+}
+.home-welcome {
+  position: relative;
+  isolation: isolate;
+  min-height: 500px;
+  height: clamp(500px, calc(100svh - 270px), 580px);
+  max-width: 1600px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  background: #101b30;
+  color: #fff0d3;
+  border-bottom: 3px double #b3955f;
+}
+.welcome-art {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+.welcome-art img {
+  object-fit: cover;
+  object-position: center 55%;
+}
+.home-welcome::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, #0c172bdd 0%, #101b3080 38%, #101b3000 65%),
+    linear-gradient(0deg, #0c172b60, transparent 25%);
+}
+.home-welcome::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid #d5b87d66;
+  pointer-events: none;
+  clip-path: polygon(
+    0 0,
+    50px 0,
+    50px 1px,
+    calc(100% - 50px) 1px,
+    calc(100% - 50px) 0,
+    100% 0,
+    100% 50px,
+    calc(100% - 1px) 50px,
+    calc(100% - 1px) calc(100% - 50px),
+    100% calc(100% - 50px),
+    100% 100%,
+    calc(100% - 50px) 100%,
+    calc(100% - 50px) calc(100% - 1px),
+    50px calc(100% - 1px),
+    50px 100%,
+    0 100%,
+    0 calc(100% - 50px),
+    1px calc(100% - 50px),
+    1px 50px,
+    0 50px
+  );
+}
+.welcome-copy {
+  margin-left: max(7%, calc((100% - 1160px) / 2));
+  padding: 2rem 0;
+  width: min(44%, 500px);
+  text-align: center;
+}
+.title-lantern {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 0.6rem;
+  filter: drop-shadow(0 0 14px #e6b45960);
+}
+.welcome-copy h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(3.8rem, 5.8vw, 5.7rem);
+  line-height: 1.04;
+  margin: 0 0 1rem;
+  letter-spacing: 0.035em;
+  font-weight: 500;
+  color: #ffedc6;
+  text-shadow:
+    0 2px 0 #88683a,
+    0 4px 20px #0a1427;
+}
+.welcome-copy h1 span {
+  display: block;
+  font-size: 1.13em;
+  letter-spacing: 0.09em;
+  padding-left: 0.09em;
+}
+.welcome-copy .ornament {
+  color: #cbb179;
+  margin: 0 auto 1.2rem;
+}
+.welcome-copy > p {
+  color: #e2d6bf;
+  font-size: 1rem;
+  margin-bottom: 1.6rem;
+}
+.welcome-actions {
+  display: grid;
+  gap: 0.7rem;
+  width: min(100%, 270px);
+  margin: auto;
+}
+.welcome-actions .button {
+  min-height: 49px;
+  border: 1px solid #8596ad;
+  color: #fff0ce;
+  background: #15243de6;
+  box-shadow:
+    inset 0 0 0 3px #192940,
+    inset 0 0 0 4px #60708855,
+    0 3px 0 #080f1c;
+  font-weight: 400;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+}
+.welcome-actions .button:hover,
+.welcome-actions .button:focus-visible {
+  background: #2c405c;
+  border-color: #c1a36e;
+}
+.quest-choice {
+  position: relative;
+  transition:
+    transform 0.16s ease,
+    background-color 0.16s ease;
+}
+.quest-choice::before {
+  content: "";
+  position: absolute;
+  left: -22px;
+  width: 10px;
+  height: 10px;
+  background: #f2d58e;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  opacity: 0;
+}
+.quest-choice:hover,
+.quest-choice:focus-visible {
+  transform: translateX(3px);
+  filter: brightness(1.15);
+}
+.quest-choice:hover::before,
+.quest-choice:focus-visible::before {
+  opacity: 1;
+}
+.welcome-actions :focus-visible {
+  outline-color: #ffe5a7;
+}
+.home-features {
+  max-width: 1040px;
+  padding: 1.45rem 2rem 2rem;
+  margin: auto;
+}
+.home-features > h2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  font:
+    500 0.8rem var(--font-display),
+    Georgia,
+    serif;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+}
+.home-features > h2::before,
+.home-features > h2::after {
+  content: "";
+  width: 60px;
+  height: 1px;
+  background: var(--border);
+}
+.feature-summaries {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  position: relative;
+}
+.feature-summaries::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+  transform: translateX(-50%);
+}
+.feature-summaries > div {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.feature-summaries > div + div {
+  padding-left: 1.5rem;
+}
+.feature-summaries h3 {
+  font:
+    600 1.12rem/1.45 var(--font-display),
+    Georgia,
+    serif;
+  margin-bottom: 0.25rem;
+}
+.feature-summaries p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.feature-symbol {
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(1px 2px 0 #503c2920);
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "PixiJS 5.3.12",
+    "file": "pixi.txt",
+    "source": "https://raw.githubusercontent.com/pixijs/pixijs/v5.3.12/LICENSE",
+    "sha256": "536a16e090f0b6c1454a7c0b47ee8414a39a2f1724a154f10ca1edc750a2dcfd"
+  },
+  {
+    "name": "Effekseer WebGL",
+    "file": "effekseer.txt",
+    "source": "https://raw.githubusercontent.com/effekseer/EffekseerForWebGL/master/LICENSE",
+    "sha256": "9686573243a6e4732edef9e39ac1356371dc7f4a17d995bea32777e36463cb29"
+  },
+  {
+    "name": "localForage 1.7.3",
+    "file": "localforage.txt",
+    "source": "https://raw.githubusercontent.com/localForage/localForage/1.7.3/LICENSE",
+    "sha256": "f179833ca4a3fc148628409048e9f9eeab30e74a17c39ffc81289f26315028c7"
+  },
+  {
+    "name": "Apache License 2.0 (localForage)",
+    "file": "apache-2.0.txt",
+    "source": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "name": "Pako 1.x",
+    "file": "pako.txt",
+    "source": "https://raw.githubusercontent.com/nodeca/pako/1.0.11/LICENSE",
+    "sha256": "a04665b3b2de56c66730c1f720f528175739e4104f79073614aa611da1e85539"
+  },
+  {
+    "name": "stb_vorbis (basis of the MZ decoder)",
+    "file": "stb.txt",
+    "source": "https://raw.githubusercontent.com/nothings/stb/master/LICENSE",
+    "sha256": "bebfe904b14301657e4e5d655c811d51fd31b97c455b9cc2d8600d6bac6cff63"
+  },
+  {
+    "name": "M+ fonts",
+    "file": "mplus.txt",
+    "source": "Licensed RPG Maker MZ installation, fonts/LICENSE_E",
+    "sha256": "f13af2cc512cecbbad8cc7e6adbb1bd384695993f58725ff9344b9129051a140"
+  },
+  {
+    "name": "Pako zlib port",
+    "file": "pako-zlib.txt",
+    "source": "https://raw.githubusercontent.com/nodeca/pako/1.0.11/lib/zlib/inflate.js",
+    "sha256": "89e612cb704e2dfd9984e533cc0372f257823ef1f382600f5e59ba1cb750e91a"
+  },
+  {
+    "name": "lie (localForage promise polyfill)",
+    "file": "lie.txt",
+    "source": "https://raw.githubusercontent.com/calvinmetcalf/lie/master/license.md",
+    "sha256": "5c81b0caa98593408b03125efa25efe622341ed87ae55561968828cd887d64a4"
+  },
+  {
+    "name": "immediate (localForage scheduler)",
+    "file": "immediate.txt",
+    "source": "https://raw.githubusercontent.com/calvinmetcalf/immediate/master/LICENSE.txt",
+    "sha256": "809e66de579fb7d92503848bbe6d1f348f4f6521a71e5d294fe7cc0c87a3b4ff"
+  }
+]

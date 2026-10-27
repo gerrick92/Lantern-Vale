@@ -1,0 +1,5 @@
+Lantern Vale is made with RPG Maker MZ.
+©Gotcha Gotcha Games Inc./YOJI OJIMA 2020
+Original maps, dialogue, rules and MosslightBridge plugin. Original generated cover art: OpenAI image generation, 20 October 2026.
+Official assets may only be redistributed as part of this finished user game under the RPG Maker MZ license. No DLC or purchased music used.
+Players may not extract or modify RPG Maker company programs or assets from this game, redistribute extracted resources, or use extracted assets in other games.

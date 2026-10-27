@@ -1,0 +1,20 @@
+{
+  "chainId": 11155111,
+  "token": "0x5833635b652e3b93d39e0895b9c82891c6bb626b",
+  "faucet": "0xb0bbbdcbde6d89f40208641d608f22a3f1352bfa",
+  "wallet": "0x79A18AE3758385e2FB6657a8e2E6202eA7abE075",
+  "transactionHash": "0xb6b826cd3223be1b67fd2243811ce48f0c4d4ddf0cefdb238b5ec61916cb1c34",
+  "blockNumber": "11970975",
+  "blockHash": "0x14d59593533caf8048567e88a33d7319c1ba79ef96eb52bdcb1922e40fafa7b4",
+  "verifiedAt": "2026-10-22T17:19:23.000Z",
+  "walletBefore": "0",
+  "walletAfter": "5000000000000000000",
+  "faucetBefore": "5000000000000000000000",
+  "faucetAfter": "4995000000000000000000",
+  "totalSupply": "5000000000000000000000",
+  "nextClaimAt": "1792775844",
+  "nextClaimAtUtc": "2026-10-23T17:17:24.000Z",
+  "cooldownSeconds": 86400,
+  "repeatClaimSimulation": "REVERTED_WITH_COOLDOWN",
+  "separateNonownerWalletTest": false
+}

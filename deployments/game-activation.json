@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "stage": "OWNER_ACCEPTANCE_ACTIVATION",
+  "chainId": 11155111,
+  "economy": "0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb",
+  "owner": "0x79A18AE3758385e2FB6657a8e2E6202eA7abE075",
+  "activationHash": "0x7d0da461e34a08b1bb6c7e3d2fa2cd29e3c85e9b055c67304390caa90a2eff8d",
+  "activationBlock": "11998288",
+  "activationBlockHash": "0xbe0765e037fdef1c1da77b5a021ecb1565e2e0bf9e2312955ca90355fef3b7ab",
+  "paused": false,
+  "snapshotBlock": "11998417",
+  "snapshotBlockHash": "0x9be698df120fe0b91ad1c0b42e294558f7c02aefe9973a887f355f1cfb16be21",
+  "verifiedAt": "2026-10-26T13:55:19.709Z",
+  "publicPlayEnabled": false,
+  "limits": [
+    "Read-only canonical receipt and confirmed state verification; this session sent no transaction.",
+    "Entry, purchases, settlement and independent-player acceptance remain separate checks."
+  ]
+}

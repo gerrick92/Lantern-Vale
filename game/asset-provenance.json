@@ -1,0 +1,45 @@
+{
+  "engine": "RPG Maker MZ",
+  "version": "1.9.0",
+  "source": "Licensed local installation: newdata and corescript/v1.9.0",
+  "eula": "https://store.steampowered.com/eula/1096900_eula_1",
+  "distribution": "Finished user game only; raw official assets excluded from Git.",
+  "maps": "Five original authored maps in game/scripts/maps.mjs",
+  "plugins": [
+    "MosslightRules — shared project rules",
+    "MosslightBridge — original MZ presentation"
+  ],
+  "music": {
+    "inn": "Town4",
+    "exploration": "Field2 / Dungeon2 / Dungeon5",
+    "fairy": "Scene2",
+    "bedroom": "Scene3",
+    "battle": "Battle2",
+    "boss": "Battle8",
+    "victory": "Victory1"
+  },
+  "dlc": [],
+  "battleEffects": [
+    "HitPhysical",
+    "HitEffect",
+    "SlashPhysical",
+    "SlashEffect",
+    "PiercePhysical",
+    "ClawPhysical",
+    "HealOne1",
+    "Powerup1",
+    "Bind",
+    "Absorb",
+    "Poison",
+    "FireOne1",
+    "FireOne2",
+    "ThunderOne1",
+    "EarthOne1",
+    "EarthOne2",
+    "WindOne1",
+    "LightOne1",
+    "DarknessOne1",
+    "NeutralOne1"
+  ],
+  "practice": true
+}

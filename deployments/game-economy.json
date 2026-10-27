@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "stage": "PAUSED_AND_FUNDED",
+  "plan": "lantern-vale-paused-economy-v1",
+  "fingerprint": "9f5457d9f3c03afb5df7c3ac233853a8ca243289db98de37b9bad1a5644f3266",
+  "chainId": 11155111,
+  "owner": "0x79A18AE3758385e2FB6657a8e2E6202eA7abE075",
+  "token": "0x5833635b652e3b93D39E0895B9C82891C6BB626b",
+  "faucet": "0xb0bbbDCbdE6D89F40208641D608F22A3F1352BfA",
+  "signer": "0xfeA1f112afC1906E3317597323Eb175993971Ca9",
+  "economy": "0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb",
+  "deploymentHash": "0xf416619abbf139353f48bfd104e2f815804dc6bf761b909950dd044c22a19570",
+  "fundingHash": "0xf74ff3b2c5a269718f3a614abe1069e6ab6c135ee1511526170bcb366f64dc02",
+  "reserveUnits": "100000000000000000000",
+  "balance": "100000000000000000000",
+  "paused": true,
+  "blockNumber": "11996936",
+  "blockHash": "0x3e3faa09c85344b46cff562cab9a1abc9b8290fd536862021340fd962b46961b",
+  "verifiedAt": "2026-10-26T08:58:42.390Z",
+  "fundingTransaction": null,
+  "paidPlayEnabled": false,
+  "limits": [
+    "This is a confirmed-block snapshot, not finality or activation approval.",
+    "Source publication, signer provisioning/recovery and real paid/player journeys remain separate checks."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-26T09:00:16.097Z",
+  "project": "frbbhbkwtgqczdjfhedi",
+  "function": "settlement-signer",
+  "signer": "0xfeA1f112afC1906E3317597323Eb175993971Ca9",
+  "status": "PROVISIONED_DISABLED",
+  "secretNames": [
+    "LV_ECONOMY_ADDRESS",
+    "LV_FAUCET_ADDRESS",
+    "LV_SEPOLIA_RPC_URL",
+    "LV_SIGNER_PRIVATE_KEY",
+    "LV_SIGNER_TOKEN",
+    "LV_SIGNING_ENABLED",
+    "LV_TOKEN_ADDRESS"
+  ],
+  "checks": [
+    "Recovered original encrypted signer and verified its public identity",
+    "Provider secret digests match in-memory expected values",
+    "No plaintext signer key written to a local file or command line",
+    "Service credential retained separately in encrypted development-only Vercel storage",
+    "Reviewed gateway configuration and five live service-isolation probes pass",
+    "Bound verified paused/funded economy and checked authenticated disabled service from app configuration"
+  ],
+  "remaining": [
+    "Operational recovery and real game acceptance before signing/entry activation"
+  ],
+  "economy": "0x9bd16131ec0e61c92ee3e6e8e8ea8f61a17519eb",
+  "deploymentBlock": "11996883"
+}

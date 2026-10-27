@@ -1,0 +1,6 @@
+# Reviewed provisioning configuration, applied on 26 October 2026 and verified
+# against the live disabled endpoint. No build or test applies this configuration.
+# The function validates its own constant-time server credential before any read
+# or signature. A Supabase user's JWT must never authorize reward signing.
+[functions.settlement-signer]
+verify_jwt = false

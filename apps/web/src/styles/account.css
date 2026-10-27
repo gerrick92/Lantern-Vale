@@ -1,0 +1,73 @@
+.account-layout {
+  display: grid;
+  grid-template-columns: 0.85fr 1fr;
+  width: min(960px, 100%);
+  margin: auto;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px #17203314;
+}
+.account-art {
+  position: relative;
+  min-height: 540px;
+  overflow: hidden;
+  background: #111e31;
+}
+.account-art > img {
+  object-fit: cover;
+  object-position: 86% center;
+}
+.account-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(#0c172b66, transparent 45%, #0c172bcc);
+}
+.account-art > div {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  z-index: 1;
+  color: #ffe8b8;
+  font:
+    500 1.6rem var(--font-display),
+    Georgia,
+    serif;
+}
+.account-art > div > .rpg-icon {
+  width: 36px;
+  height: 36px;
+}
+.account-art .ornament {
+  color: #d7b879;
+}
+.account-page {
+  width: 100%;
+  max-width: none;
+  padding: 2.5rem;
+  margin: 0;
+  min-width: 0;
+}
+.account-page > h1 {
+  font-size: clamp(1.8rem, 3vw, 2.2rem);
+}
+.account-page > .panel {
+  border: 0;
+  padding-top: 0;
+}
+.account-page .panel {
+  background: none;
+}
+.account-page .tabs {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.6rem;
+}
+.account-checkpoint + .inline-link {
+  margin-left: 1rem;
+}

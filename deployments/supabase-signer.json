@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-10-26T10:08:45.717Z",
+  "project": "frbbhbkwtgqczdjfhedi",
+  "function": "settlement-signer",
+  "version": 6,
+  "url": "https://frbbhbkwtgqczdjfhedi.supabase.co/functions/v1/settlement-signer",
+  "status": "CONTROLLED_ACCEPTANCE_ENABLED",
+  "source": {
+    "files": [
+      {
+        "name": "index.ts",
+        "bytes": 523,
+        "sha256": "9c9e2016b103d1dc2bb17ea4d5e4c436fc5c732eca5a0daa6dbea8493256033d"
+      },
+      {
+        "name": "runtime.ts",
+        "bytes": 8615,
+        "sha256": "12c4b0b337d451800ad417005460325b34582dff31823cd7db024eec526e7869"
+      },
+      {
+        "name": "handler.ts",
+        "bytes": 3883,
+        "sha256": "b3975a64ddf2071ef9510431a2ac5ada9bf7601098e566a4b36aea4aaed59073"
+      },
+      {
+        "name": "policy.ts",
+        "bytes": 5478,
+        "sha256": "d454d1fcf048191c97be69160f6e526a9499674a1960b27164e2d455e4521fd8"
+      },
+      {
+        "name": "deno.json",
+        "bytes": 175,
+        "sha256": "66b11ae557d7e4c9001983070be8d415a5802b03d91806cd698d27398e09941f"
+      }
+    ],
+    "verification": "Five downloaded source files match local files byte-for-byte"
+  },
+  "checks": [
+    {
+      "name": "anonymous",
+      "status": 401,
+      "signatureReturned": false
+    },
+    {
+      "name": "wrong credential",
+      "status": 401,
+      "signatureReturned": false
+    },
+    {
+      "name": "authorized",
+      "status": 400,
+      "signatureReturned": false
+    },
+    {
+      "name": "browser origin",
+      "status": 400,
+      "signatureReturned": false
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "viem": "npm:viem@2.57.7",
+    "viem/accounts": "npm:viem@2.57.7/accounts",
+    "viem/chains": "npm:viem@2.57.7/chains",
+    "zod": "npm:zod@4.6.7"
+  }
+}

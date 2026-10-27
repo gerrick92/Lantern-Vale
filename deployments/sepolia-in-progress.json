@@ -1,0 +1,23 @@
+{
+  "plan": "lantern-vale-token-faucet-v1",
+  "chainId": 11155111,
+  "owner": "0x79A18AE3758385e2FB6657a8e2E6202eA7abE075",
+  "fingerprint": "1d15dc73cb6f7155c5742bd61bd7545aa0243073ebaf08830bd4159ca0836218",
+  "steps": [
+    {
+      "hash": "0x3c6848064e3716a2666d1920159e9aa99484d97a2140b27ae5b4cc1c16618a65",
+      "address": "0x5833635b652e3b93d39e0895b9c82891c6bb626b"
+    },
+    {
+      "hash": "0xc3c12f34a792730073671781f0cd20ccb0ed316ca83458b6f13c706c92fe24db",
+      "address": "0xb0bbbdcbde6d89f40208641d608f22a3f1352bfa"
+    }
+  ],
+  "checkedBlock": "11970888",
+  "verifiedAt": "2026-10-22T17:00:14.545Z",
+  "claimAmount": "5000000000000000000",
+  "cooldownSeconds": "86400",
+  "faucetBalance": "0",
+  "supply": "0",
+  "status": "TOKEN_AND_FAUCET_VERIFIED_FUNDING_PENDING"
+}

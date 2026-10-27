@@ -1,0 +1,263 @@
+.information-page {
+  max-width: 840px;
+  margin: auto;
+  overflow-wrap: anywhere;
+}
+.feature-explanation {
+  padding: 1.8rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.feature-explanation h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.4rem;
+}
+.feature-explanation h2 .rpg-icon {
+  width: 36px;
+  height: 36px;
+}
+.feature-details {
+  margin-left: 52px;
+}
+.feature-details > summary {
+  color: var(--accent);
+  width: fit-content;
+  min-height: 44px;
+}
+.feature-details p {
+  max-width: 44rem;
+}
+.info-chapter > h3 {
+  margin: 2.4rem 0 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 1.35rem;
+}
+.info-notice {
+  border-left: 3px solid var(--gold);
+  padding-left: 1rem;
+}
+.info-chapter figure {
+  margin: 1.5rem 0;
+}
+.info-chapter figcaption {
+  margin-bottom: 1rem;
+  color: var(--text);
+  font-weight: 700;
+}
+.info-chapter .info-number {
+  margin: 0.5rem 0 1rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: var(--gold);
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+.info-number span {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 1rem;
+  color: var(--text);
+}
+.supply-track,
+.allocation-track {
+  display: flex;
+  height: 18px;
+  overflow: hidden;
+  border: 1px solid var(--control-border);
+  background: repeating-linear-gradient(
+    135deg,
+    var(--soft) 0 4px,
+    var(--surface) 4px 8px
+  );
+}
+.supply-track > span {
+  background: var(--gold);
+}
+.supply-labels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.7rem 2rem;
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+}
+.supply-labels strong {
+  display: block;
+}
+.allocation-owner {
+  background: #536b81;
+}
+.allocation-rewards {
+  background: #bd934d;
+}
+.allocation-faucet {
+  background: #99b5a8;
+}
+.allocation-legend {
+  margin: 0.7rem 0 0;
+}
+.allocation-legend > div {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.2rem 1rem;
+  padding: 0.35rem 0;
+}
+.allocation-legend dt {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.allocation-legend dt::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  background: #536b81;
+  border: 1px solid var(--control-border);
+}
+.allocation-legend > div:nth-child(2) dt::before {
+  background: #bd934d;
+}
+.allocation-legend > div:nth-child(3) dt::before {
+  background: #99b5a8;
+}
+.allocation-legend dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.claim-limits,
+.practice-outcomes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
+  padding: 1.2rem 0;
+  border-block: 1px solid var(--border);
+}
+.info-chapter h4 {
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+}
+.claim-limits p:last-child,
+.practice-outcomes p:last-child {
+  margin-bottom: 0;
+}
+.claim-clock ol,
+.voting-flow ol {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  padding: 0;
+}
+.claim-clock li,
+.voting-flow li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-top: 0.8rem;
+  border-top: 2px solid var(--gold);
+}
+.claim-clock li + li::before,
+.voting-flow li + li::before {
+  position: absolute;
+  content: "\2192";
+  color: var(--gold);
+  top: -0.9rem;
+  left: -1.2rem;
+}
+.voting-flow .rpg-icon {
+  width: 32px;
+  height: 32px;
+  margin: 0.4rem 0;
+}
+.practice-example label {
+  display: block;
+}
+.practice-example input[type="range"] {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: 0.3rem 0 0.8rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.info-chapter .info-note {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.roadmap-trail {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+.roadmap-trail > li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  column-gap: 1.4rem;
+  padding-bottom: 1.7rem;
+}
+.roadmap-trail > li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 42px;
+  bottom: 4px;
+  left: 19px;
+  border-left: 1px dashed var(--control-border);
+}
+.roadmap-trail > li > .rpg-icon {
+  width: 40px;
+  height: 40px;
+}
+.roadmap-state {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.45rem;
+}
+.roadmap-trail > li[aria-current="step"] .roadmap-state {
+  color: var(--accent);
+  font-weight: 700;
+}
+.roadmap-trail h3 {
+  margin-bottom: 0.65rem;
+}
+.roadmap-trail p {
+  margin-bottom: 0;
+}
+@media (max-width: 600px) {
+  .claim-limits,
+  .practice-outcomes,
+  .claim-clock ol,
+  .voting-flow ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .claim-limits > section + section,
+  .practice-outcomes > div + div {
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .claim-clock li,
+  .voting-flow li {
+    padding: 0 0 0 1rem;
+    border-top: 0;
+    border-left: 2px solid var(--gold);
+  }
+  .claim-clock li + li::before,
+  .voting-flow li + li::before {
+    content: "\2193";
+    top: -1.55rem;
+    left: -0.4rem;
+  }
+  .roadmap-trail > li {
+    column-gap: 0.8rem;
+  }
+}

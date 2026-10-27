@@ -1,0 +1,74 @@
+.glow-session {
+  min-width: 0;
+}
+.glow-stage {
+  position: relative;
+}
+.glow-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.5rem, 3vw, 2rem);
+  overflow: auto;
+  background: rgb(5 12 23 / 75%);
+}
+.glow-payment,
+.glow-overlay > .error {
+  width: min(100%, 36rem);
+  max-height: 100%;
+  overflow: auto;
+  padding: clamp(1rem, 3vw, 2rem);
+  border: 1px solid #cbb67f;
+  background: #152338;
+  color: #f4eddb;
+  box-shadow:
+    0 0 0 4px #152338,
+    0 0 0 5px #85744e;
+}
+.glow-payment h2 {
+  color: #f4d592;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+}
+.glow-payment summary {
+  color: #f4d592;
+}
+.glow-payment details {
+  margin-top: 1rem;
+}
+.glow-session:fullscreen {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  background: #0c1420;
+  color: #f4eddb;
+  overflow: auto;
+}
+.glow-session:fullscreen .glow-toolbar {
+  flex: 0 0 auto;
+  margin: 0 0 0.5rem;
+}
+.glow-session:fullscreen .glow-session-content {
+  flex: 1;
+  min-height: 0;
+}
+.glow-session:fullscreen .game-layout,
+.glow-session:fullscreen .glow-stage {
+  height: 100%;
+}
+.glow-session:fullscreen .practice-frame {
+  height: 100%;
+  margin: 0;
+  border: 0;
+  aspect-ratio: auto;
+}
+.glow-session:fullscreen[data-companion="false"] #paid-companion,
+.glow-session:fullscreen[data-companion="false"] .glow-companion-controls,
+.glow-session:fullscreen[data-companion="false"] .glow-companion-note {
+  display: none;
+}
+.glow-session:fullscreen[data-companion="true"] .glow-stage {
+  display: none;
+}

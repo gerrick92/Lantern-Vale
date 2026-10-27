@@ -1,0 +1,29 @@
+{
+  "chainId": 11155111,
+  "provider": "Sourcify",
+  "checkedAt": "2026-10-22T17:20:45.540Z",
+  "contracts": [
+    {
+      "name": "SLMSToken",
+      "address": "0x5833635b652e3b93D39E0895B9C82891C6BB626b",
+      "creationMatch": "exact_match",
+      "runtimeMatch": "exact_match",
+      "verifiedAt": "2026-10-22T17:15:57Z",
+      "sourceUrl": "https://sourcify.dev/server/v2/verify/9235f0da-f2f2-44ee-a075-9e634c54af64",
+      "blockscoutUrl": "https://eth-sepolia.blockscout.com//address/0x5833635b652e3b93D39E0895B9C82891C6BB626b",
+      "blockscoutStatus": "Fail - Unable to verify",
+      "etherscanStatus": "Daily limit of 500 source code submissions reached"
+    },
+    {
+      "name": "SLMSFaucet",
+      "address": "0xb0bbbDCbdE6D89F40208641D608F22A3F1352BfA",
+      "creationMatch": "exact_match",
+      "runtimeMatch": "exact_match",
+      "verifiedAt": "2026-10-22T17:17:12Z",
+      "sourceUrl": "https://sourcify.dev/server/v2/verify/ad3cc19b-b843-4a71-bb51-604efc36023b",
+      "blockscoutUrl": "https://eth-sepolia.blockscout.com//address/0xb0bbbDCbdE6D89F40208641D608F22A3F1352BfA",
+      "blockscoutStatus": "Fail - Unable to verify",
+      "etherscanStatus": "Daily limit of 500 source code submissions reached"
+    }
+  ]
+}

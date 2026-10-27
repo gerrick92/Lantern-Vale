@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "purpose": "restricted-settlement-signer",
+  "sourceProject": "frbbhbkwtgqczdjfhedi",
+  "object": "signer/frbbhbkwtgqczdjfhedi/candidate-v1",
+  "address": "0xfeA1f112afC1906E3317597323Eb175993971Ca9",
+  "encryptedSha256": "f8f4c4a11b7a615ab042ff329fb2f298e896ed573688b3fc339e433fbe3a34b7",
+  "verifiedAt": "2026-10-26T08:22:08.759Z",
+  "status": "CUSTODY_VERIFIED",
+  "storageProject": "nisviqoxcfbtwccdjqoz",
+  "bucket": "lantern-recovery",
+  "recoveryKeyLocation": "Vercel prj_e6pw3goMLbaj0PzAfYiTky6DgUib: LV_SIGNER_RECOVERY_KEY_V1, development only",
+  "trustedIdentityLocation": "Vercel prj_e6pw3goMLbaj0PzAfYiTky6DgUib: LV_SIGNER_CUSTODY_V1, development only",
+  "checks": [
+    "remote authenticated decryption",
+    "recovered signing proof",
+    "separate signing role",
+    "anonymous and public access denied"
+  ],
+  "limits": [
+    "Function provisioning is recorded separately in signer-provisioning.json",
+    "Custody verification does not deploy an economy, enable signing or issue settlements",
+    "No player key accessed",
+    "Provider account recovery and paid outage drill remain separate"
+  ]
+}
